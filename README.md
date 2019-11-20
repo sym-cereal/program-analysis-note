@@ -37,6 +37,10 @@ Normally, the basic parts include dataflow analysis frameword (reachiing definit
   - [Shape Analysis by WISC](https://research.cs.wisc.edu/wpis/papers/cc2000.pdf): Introduce shape analysis for heap
   - [Shape Analysis and Applications by UT](https://personal.utdallas.edu/~zhiqiang.lin/file/f15/shape-analysis-ch12.pdf)
 - Abstract Interpretation: [16.399 by MIT](http://web.mit.edu/16.399/www/) 
+- Abstract Machine: Abstract Machine primarirly discuss about the exact execution of a program
+  - [Abstract machines for programming language implementation] http://www.inf.ed.ac.uk/teaching/courses/lsi/diehl_abstract_machines.pdf
+  - [Abstracting Abstract Machines](http://matt.might.net/papers/vanhorn2010abstract.pdf): The name is so abstract
+  - [Abstracting Definitional Interpreters](https://plum-umd.github.io/abstracting-definitional-interpreters/): Solid foundation of semmantics
 
 ## Binary Analysis
 
