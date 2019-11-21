@@ -11,10 +11,13 @@ Here are some tools for program analysis. I strongly recommend you to implement 
 
 ## Project
 
-- [SVF](https://github.com/SVF-tools/SVF): Program Analysis Framework based on LLVM
 - [Infer](https://github.com/facebook/infer): Source code static analysis based on OCaml
-- [CWE-Checker](https://github.com/fkie-cad/cwe_checker): Binary analysis based on BAP
-- [Klee](https://github.com/klee/klee): Symbolic Execution based on LLVM
++ BAP based
+  - [CWE-Checker](https://github.com/fkie-cad/cwe_checker): Binary analysis based on BAP
+  - [CBAT TOOLS](https://github.com/draperlaboratory/cbat_tools): This project implements some algrotihm on BAP
++ LLVM based
+  - [Klee](https://github.com/klee/klee): Symbolic Execution based on LLVM
+  - [SVF](https://github.com/SVF-tools/SVF): Program Analysis Framework based on LLVM
 
 ## Intro
 
@@ -38,7 +41,7 @@ Normally, the basic parts include dataflow analysis frameword (reachiing definit
   - [Shape Analysis and Applications by UT](https://personal.utdallas.edu/~zhiqiang.lin/file/f15/shape-analysis-ch12.pdf)
 - Abstract Interpretation: [16.399 by MIT](http://web.mit.edu/16.399/www/) 
 - Abstract Machine: Abstract Machine primarirly discuss about the exact execution of a program
-  - [Abstract machines for programming language implementation] http://www.inf.ed.ac.uk/teaching/courses/lsi/diehl_abstract_machines.pdf
+  - [Abstract machines for programming language implementation] (http://www.inf.ed.ac.uk/teaching/courses/lsi/diehl_abstract_machines.pdf)
   - [Abstracting Abstract Machines](http://matt.might.net/papers/vanhorn2010abstract.pdf): The name is so abstract
   - [Abstracting Definitional Interpreters](https://plum-umd.github.io/abstracting-definitional-interpreters/): Solid foundation of semmantics
 
@@ -47,3 +50,8 @@ Normally, the basic parts include dataflow analysis frameword (reachiing definit
 - [Analyzing Memory Accesses in x86 Executables](https://research.cs.wisc.edu/wpis/papers/cc04.pdf): Introduce **value-set analysis**. This analysis uses an abstract domain for representing an over-approximation of the set of values that each data object can hold at each program point.
 - Decompile:
   - [Reverse Compilation Techniques](http://www.phatcode.net/res/228/files/decompilation_thesis.pdf): This book is awesome, all about decompiling from frontend to backend!!!
+  - [TIE: Principled Reverse Engineering of Types in Binary Programs](https://users.ece.cmu.edu/~aavgerin/papers/tie-ndss-2011.pdf): Recover types from a program based on type lattice induction.
+
+## Some ~~Unuseful~~ Cutting-edge Research
+
+- [Unleashing MAYHEM on Binary Code](https://users.ece.cmu.edu/~dbrumley/pdf/Cha%20et%20al._2012_Unleashing%20Mayhem%20on%20Binary%20Code.pdf): How to structure a CRS, and new methods on symbolic execution
