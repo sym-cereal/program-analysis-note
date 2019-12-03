@@ -23,11 +23,16 @@ Here are some tools for program analysis. I strongly recommend you to implement 
 
 Normally, the basic parts include dataflow analysis frameword (reachiing definition, interval analysis, ...), pointer analysis (andreson and steensgaard), and abstract interpretation (sign analysis). You are also encouraged to learn discrete math to understand the notations in text books.
 
-- Courses:
+## Courses
+
+- Static Analysis:
   - [UW CSE 501](https://courses.cs.washington.edu/courses/cse501/15sp/): Personally recommend, the contents are more compacted.
   - [CMU CS17-355](http://www.cs.cmu.edu/~aldrich/courses/17-355-19sp/): Some slides are missing. And the contents focus on security stuff more. Recommend to use notes here and slides from UW
-  - [CMU CS15-414](https://www.cs.cmu.edu/~15414/): Model checking related
   - [IOWA CS513X](http://web.cs.iastate.edu/~weile/cs513x/): The topic is about staitc analysis but slighlty more depth.
+  - [MIT 16.399](http://web.mit.edu/16.399/www/#schedule): Abstract Interpretation, in a more math way.
+- Program Synthesis and Model Checking
+  - [CMU CS15-414](https://www.cs.cmu.edu/~15414/schedule.html): Model Checking
+  - [UW CSE507](https://courses.cs.washington.edu/courses/cse507/): Program Synthesis in Racket
 
 - Books:
   - [SPA Book](https://cs.au.dk/~amoeller/spa/spa.pdf): Personally recommend. This book is static analysis oriented. It also provied a toy language analyszer. The psedu-code and syntax are better the PPA.
