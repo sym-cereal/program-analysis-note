@@ -48,9 +48,10 @@ Normally, the basic parts include dataflow analysis frameword (reachiing definit
 ## Binary Analysis
 
 - [Analyzing Memory Accesses in x86 Executables](https://research.cs.wisc.edu/wpis/papers/cc04.pdf): Introduce **value-set analysis**. This analysis uses an abstract domain for representing an over-approximation of the set of values that each data object can hold at each program point.
-- Decompile:
+- Decompile (or Binary Translation):
   - [Reverse Compilation Techniques](http://www.phatcode.net/res/228/files/decompilation_thesis.pdf): This book is awesome, all about decompiling from frontend to backend!!!
   - [TIE: Principled Reverse Engineering of Types in Binary Programs](https://users.ece.cmu.edu/~aavgerin/papers/tie-ndss-2011.pdf): Recover types from a program based on type lattice induction.
+  - [mcsema](https://github.com/lifting-bits/mcsema/): Translate binary to LLVM bytecode.
 
 ## Some ~~Unuseful~~ Cutting-edge Research
 
