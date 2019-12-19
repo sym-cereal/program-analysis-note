@@ -58,6 +58,11 @@ Normally, the basic parts include dataflow analysis frameword (reaching definiti
   - [TIE: Principled Reverse Engineering of Types in Binary Programs](https://users.ece.cmu.edu/~aavgerin/papers/tie-ndss-2011.pdf): Recover types from a program based on type lattice induction.
   - [mcsema](https://github.com/lifting-bits/mcsema/): Translate binary to LLVM bytecode.
 
+## Related Stuff
+
+### SMT Solver
+- [Programming Z3](https://theory.stanford.edu/~nikolaj/programmingz3.html)
+
 ## Some ~~Unuseful~~ Cutting-edge Research
 
 - [Unleashing MAYHEM on Binary Code](https://users.ece.cmu.edu/~dbrumley/pdf/Cha%20et%20al._2012_Unleashing%20Mayhem%20on%20Binary%20Code.pdf): How to structure a CRS, and new methods on symbolic execution
