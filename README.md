@@ -33,6 +33,7 @@ Normally, the basic parts include dataflow analysis frameword (reaching definiti
 - Program Synthesis and Model Checking
   - [CMU CS15-414](https://www.cs.cmu.edu/~15414/schedule.html): Model Checking
   - [UW CSE507](https://courses.cs.washington.edu/courses/cse507/): Program Synthesis in Racket
+  - [MIT 6.820](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-820-fundamentals-of-program-analysis-fall-2015/): Focused on abstract interpreter and model checking.
 
 - Books:
   - [SPA Book](https://cs.au.dk/~amoeller/spa/spa.pdf): Personally recommend. This book is static analysis oriented. It also provied a toy language analyszer. The psedu-code and syntax are better the PPA.
