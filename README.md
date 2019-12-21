@@ -23,6 +23,8 @@ Here are some tools for program analysis. I strongly recommend you to implement 
 
 Normally, the basic parts include dataflow analysis frameword (reaching definition, interval analysis, ...), pointer analysis (andreson and steensgaard), and abstract interpretation (sign analysis). You are also encouraged to learn discrete math to understand the notations in text books.
 
+A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
+
 ## Courses
 
 - Static Analysis:
