@@ -60,7 +60,12 @@ A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
   - [Reverse Compilation Techniques](http://www.phatcode.net/res/228/files/decompilation_thesis.pdf): This book is awesome, all about decompiling from frontend to backend!!!
   - [TIE: Principled Reverse Engineering of Types in Binary Programs](https://users.ece.cmu.edu/~aavgerin/papers/tie-ndss-2011.pdf): Recover types from a program based on type lattice induction.
   - [mcsema](https://github.com/lifting-bits/mcsema/): Translate binary to LLVM bytecode.
+  
+## PA + Security
 
+- Safety
+  - [Control Flow Intergrity](https://www.microsoft.com/en-us/research/wp-content/uploads/2005/11/ccs05.pdf)
+  
 ## Related Stuff
 
 ### SMT Solver
