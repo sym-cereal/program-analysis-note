@@ -59,6 +59,7 @@ A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
 - Decompile (or Binary Translation):
   - [Reverse Compilation Techniques](http://www.phatcode.net/res/228/files/decompilation_thesis.pdf): This book is awesome, all about decompiling from frontend to backend!!!
   - [TIE: Principled Reverse Engineering of Types in Binary Programs](https://users.ece.cmu.edu/~aavgerin/papers/tie-ndss-2011.pdf): Recover types from a program based on type lattice induction.
+  - [Polymorphic Type Inference for Machine Code](https://arxiv.org/pdf/1603.05495.pdf): Another thesis for type infer in binary code.
   - [mcsema](https://github.com/lifting-bits/mcsema/): Translate binary to LLVM bytecode.
   
 ## Formal Method
