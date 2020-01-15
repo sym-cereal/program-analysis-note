@@ -75,6 +75,7 @@ A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
 
 ### SMT Solver
 - [Programming Z3](https://theory.stanford.edu/~nikolaj/programmingz3.html)
+- [SAT Handbook](https://www.ics.uci.edu/%7Edechter/courses/ics-275a/winter-2016/readings/SATHandbook-CDCL.pdf)
 
 ## Some ~~Unuseful~~ Cutting-edge Research
 
