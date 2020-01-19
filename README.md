@@ -34,7 +34,7 @@ A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
   - [MIT 16.399](http://web.mit.edu/16.399/www/#schedule): Abstract Interpretation, in a more math way.
 - Program Synthesis and Model Checking
   - [CMU CS15-414](https://www.cs.cmu.edu/~15414/schedule.html): Model Checking
-  - [UW CSE507](https://courses.cs.washington.edu/courses/cse507/): Program Synthesis in Racket
+  - [UW CSE 507](https://courses.cs.washington.edu/courses/cse507/): SMT solver and apllications
   - [MIT 6.820](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-820-fundamentals-of-program-analysis-fall-2015/): Focused on abstract interpreter and model checking.
 
 - Books:
@@ -76,6 +76,7 @@ A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
 ### SMT Solver
 - [Programming Z3](https://theory.stanford.edu/~nikolaj/programmingz3.html)
 - [SAT Handbook](https://www.ics.uci.edu/%7Edechter/courses/ics-275a/winter-2016/readings/SATHandbook-CDCL.pdf)
+- **The Calculus of Computation**: All about SMT foundamental.
 
 ## Some ~~Unuseful~~ Cutting-edge Research
 
