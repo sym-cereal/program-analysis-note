@@ -33,9 +33,12 @@ A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
   - [IOWA CS513X](http://web.cs.iastate.edu/~weile/cs513x/): The topic is about staitc analysis but slighlty more depth.
   - [MIT 16.399](http://web.mit.edu/16.399/www/#schedule): Abstract Interpretation, in a more math way.
 - Program Synthesis and Model Checking
+  - [UW CSE599](https://courses.cs.washington.edu/courses/cse599a2/15wi/): Advanced Computer-Aided Reasoning for Software
   - [CMU CS15-414](https://www.cs.cmu.edu/~15414/schedule.html): Model Checking
-  - [UW CSE 507](https://courses.cs.washington.edu/courses/cse507/): SMT solver and apllications
   - [MIT 6.820](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-820-fundamentals-of-program-analysis-fall-2015/): Focused on abstract interpreter and model checking.
+- SMT:
+  - [UW CSE 507](https://courses.cs.washington.edu/courses/cse507/): SMT solver and apllications
+  - [CMU 15816](http://www.cs.cmu.edu/~mheule/15816-f19/): Automated Reasoning and Satisfiability
 
 - Books:
   - [SPA Book](https://cs.au.dk/~amoeller/spa/spa.pdf): Personally recommend. This book is static analysis oriented. It also provied a toy language analyszer. The psedu-code and syntax are better the PPA.
