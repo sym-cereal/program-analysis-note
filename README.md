@@ -15,6 +15,7 @@ Here are some tools for program analysis. I strongly recommend you to implement 
 + BAP based
   - [CWE-Checker](https://github.com/fkie-cad/cwe_checker): Binary analysis based on BAP
   - [CBAT TOOLS](https://github.com/draperlaboratory/cbat_tools): This project implements some algrotihm on BAP
+  - Several papers related to BAP implementation: http://okmij.org/ftp/tagless-final/JFP.pdf http://www.cs.utexas.edu/~wcook/Drafts/2012/ecoop2012.pdf http://okmij.org/ftp/tagless-final/course/optimizations.html
 + LLVM based
   - [Klee](https://github.com/klee/klee): Symbolic Execution based on LLVM
   - [SVF](https://github.com/SVF-tools/SVF): Program Analysis Framework based on LLVM
