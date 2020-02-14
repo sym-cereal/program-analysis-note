@@ -45,7 +45,7 @@ A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
   - [SPA Book](https://cs.au.dk/~amoeller/spa/spa.pdf): Personally recommend. This book is static analysis oriented. It also provied a toy language analyszer. The psedu-code and syntax are better the PPA.
   - Principle of Program Analysis: Old school book. The syntax is abstract. Might be too hard to understand.
 
-## General Analysis
+## General
 
 - [Program slicing](http://www.cs.toronto.edu/~chechik/courses06/csc2125/tip95survey.pdf): For some values your analyzer intereted, we can slice the program to find related part of the program which impacts thos values.
 - Shape Analysis;
@@ -56,6 +56,8 @@ A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
   - [Abstract machines for programming language implementation] (http://www.inf.ed.ac.uk/teaching/courses/lsi/diehl_abstract_machines.pdf)
   - [Abstracting Abstract Machines](http://matt.might.net/papers/vanhorn2010abstract.pdf): The name is so abstract
   - [Abstracting Definitional Interpreters](https://plum-umd.github.io/abstracting-definitional-interpreters/): Solid foundation of semmantics
+- More on Dataflow:
+  - [Context-, Flow-, and Field-Sensitive Data-Flow Analysis using Synchronized Pushdown Systems](https://dl.acm.org/doi/pdf/10.1145/3290361?download=true): Best paper!
 
 ## Binary Analysis
 
