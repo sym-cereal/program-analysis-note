@@ -77,6 +77,8 @@ A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
 
 - Safety
   - [Control Flow Intergrity](https://www.microsoft.com/en-us/research/wp-content/uploads/2005/11/ccs05.pdf)
+- Taint Analysis:
+  - [Saluki Taint Analysis](https://www.cs.cmu.edu/~rvantond/pdfs/saluki-bar-2018.pdf)
   
 ## Related Stuff
 
