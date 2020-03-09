@@ -26,7 +26,7 @@ Normally, the basic parts include dataflow analysis frameword (reaching definiti
 
 A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
 
-## Courses
+## General Courses
 
 - Static Analysis:
   - [UW CSE 501](https://courses.cs.washington.edu/courses/cse501/15sp/): Personally recommend, the contents are more compacted.
@@ -41,24 +41,23 @@ A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
 - SMT:
   - [UW CSE 507](https://courses.cs.washington.edu/courses/cse507/): SMT solver and apllications
   - [CMU 15816](http://www.cs.cmu.edu/~mheule/15816-f19/): Automated Reasoning and Satisfiability
-
 - Books:
   - [SPA Book](https://cs.au.dk/~amoeller/spa/spa.pdf): Personally recommend. This book is static analysis oriented. It also provied a toy language analyszer. The psedu-code and syntax are better the PPA.
   - Principle of Program Analysis: Old school book. The syntax is abstract. Might be too hard to understand.
 
-## General
+## Abstract Interpretation
+  - Abstract Interpretation Course: [16.399 by MIT](http://web.mit.edu/16.399/www/)
+  - [ABSTRACT INTERPRETATION : ‘A UNIFIED LATTICE MODEL FOR STATIC ANALYSIS OF PROGRAMS BY CONSTRUCTION OR APPROXIMATION OF FIXPOINTS](https://courses.cs.washington.edu/courses/cse501/15sp/papers/cousot.pdf): The original paper
 
-- [Program slicing](http://www.cs.toronto.edu/~chechik/courses06/csc2125/tip95survey.pdf): For some values your analyzer intereted, we can slice the program to find related part of the program which impacts thos values.
-- Shape Analysis;
+## Dataflow Analysis
+  - [Context-, Flow-, and Field-Sensitive Data-Flow Analysis using Synchronized Pushdown Systems](https://dl.acm.org/doi/pdf/10.1145/3290361?download=true): Best paper!
+  
+## Shape Analysis;
   - [Shape Analysis by WISC](https://research.cs.wisc.edu/wpis/papers/cc2000.pdf): Introduce shape analysis for heap
   - [Shape Analysis and Applications by UT](https://personal.utdallas.edu/~zhiqiang.lin/file/f15/shape-analysis-ch12.pdf)
-- Abstract Interpretation: [16.399 by MIT](http://web.mit.edu/16.399/www/) 
-- Abstract Machine: Abstract Machine primarirly discuss about the exact execution of a program
-  - [Abstract machines for programming language implementation] (http://www.inf.ed.ac.uk/teaching/courses/lsi/diehl_abstract_machines.pdf)
-  - [Abstracting Abstract Machines](http://matt.might.net/papers/vanhorn2010abstract.pdf): The name is so abstract
-  - [Abstracting Definitional Interpreters](https://plum-umd.github.io/abstracting-definitional-interpreters/): Solid foundation of semmantics
-- More on Dataflow:
-  - [Context-, Flow-, and Field-Sensitive Data-Flow Analysis using Synchronized Pushdown Systems](https://dl.acm.org/doi/pdf/10.1145/3290361?download=true): Best paper!
+  
+## Porgram Slicing:
+  - [Program Slicing Handbook](http://www.cs.toronto.edu/~chechik/courses06/csc2125/tip95survey.pdf): For some values your analyzer intereted, we can slice the program to find related part of the program which impacts thos values.
 
 ## Binary Analysis
 
@@ -87,6 +86,12 @@ A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
 - [Programming Z3](https://theory.stanford.edu/~nikolaj/programmingz3.html)
 - [SAT Handbook](https://www.ics.uci.edu/%7Edechter/courses/ics-275a/winter-2016/readings/SATHandbook-CDCL.pdf)
 - **The Calculus of Computation**: All about SMT foundamental.
+
+### Abstract Machine
+  Abstract Machine primarirly discuss about the exact execution of a program.
+  - [Abstract machines for programming language implementation] (http://www.inf.ed.ac.uk/teaching/courses/lsi/diehl_abstract_machines.pdf)
+  - [Abstracting Abstract Machines](http://matt.might.net/papers/vanhorn2010abstract.pdf): The name is so abstract
+  - [Abstracting Definitional Interpreters](https://plum-umd.github.io/abstracting-definitional-interpreters/): Solid foundation of semmantics
 
 ## Some ~~Unuseful~~ Cutting-edge Research
 
