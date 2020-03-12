@@ -51,6 +51,7 @@ A telegram channel related to PA: `aHR0cHM6Ly90Lm1lL2JhYnliYWJ5cHdu`.
 
 ## Dataflow Analysis
   - [Context-, Flow-, and Field-Sensitive Data-Flow Analysis using Synchronized Pushdown Systems](https://dl.acm.org/doi/pdf/10.1145/3290361?download=true): Best paper!
+  - [Precise Interprocedural Dataflow Analysis via Graph Reachability](https://research.cs.wisc.edu/wpis/papers/popl95.pdf): The IFDS framework 
   
 ## Shape Analysis;
   - [Shape Analysis by WISC](https://research.cs.wisc.edu/wpis/papers/cc2000.pdf): Introduce shape analysis for heap
