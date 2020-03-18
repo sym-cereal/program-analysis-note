@@ -121,18 +121,16 @@ books.
 
 - Value Set Analysis:
 
-  - [[https://research.cs.wisc.edu/wpis/papers/cc04.pdf][Analyzing
-    Memory Accesses in x86 Executables]]: Introduce *value-set
-    analysis*. This analysis uses an abstract domain for representing an
-    over-approximation of the set of values that each data object can
-    hold at each program point.
-  - [[https://www.usenix.org/conference/usenixsecurity19/presentation/guo][DEEPVSA:
-    Facilitating Value-set Analysis with Deep Learning for Postmortem
-    Program Analysis]]
+  1. [[https://research.cs.wisc.edu/wpis/papers/cc04.pdf][Analyzing Memory Accesses in x86 Executables]]: Introduce *value-set analysis*. This analysis uses an abstract domain for representing an over-approximation of the set of values that each data object can hold at each program point.
+    
+  2. [[https://research.cs.wisc.edu/wpis/papers/etaps08.invited.pdf][Improved Memory-Access Analysis for x86 Executables]]: An improved version of VSA.
+
+  3. [[https://www.usenix.org/conference/usenixsecurity19/presentation/guo][DEEPVSA: Facilitating Value-set Analysis with Deep Learning for Postmortem Program Analysis]]: VSA + ML
 
 - [[https://patricegodefroid.github.io/public_psfiles/icse2014.pdf][MicroX:
   Emulator for testing without input]]: A novel framework to emulate
   program without input for bug finding.
+  
 - Decompile (or Binary Translation):
 
   - [[http://www.phatcode.net/res/228/files/decompilation_thesis.pdf][Reverse
@@ -147,9 +145,6 @@ books.
     binary to LLVM bytecode.
 
 ** Formal Method
-   :PROPERTIES:
-   :CUSTOM_ID: formal-method
-   :END:
 
 - [[https://softwarefoundations.cis.upenn.edu/current/index.html][Software
   Foundation]]: Formal method all in one
@@ -189,14 +184,11 @@ program.
 
 - [[http://www.inf.ed.ac.uk/teaching/courses/lsi/diehl_abstract_machines.pdf][Abstract machines for programming language implementation]]
 
-- [[http://matt.might.net/papers/vanhorn2010abstract.pdf][Abstracting
-Abstract Machines]]: The name is so abstract
+- [[http://matt.might.net/papers/vanhorn2010abstract.pdf][Abstracting Abstract Machines]]: The name is so abstract
 
-- [[https://plum-umd.github.io/abstracting-definitional-interpreters/][Abstracting
-Definitional Interpreters]]: Solid foundation of semmantics
+- [[https://plum-umd.github.io/abstracting-definitional-interpreters/][Abstracting Definitional Interpreters]]: Solid foundation of semmantics
 
 ** Others
 
-- [[https://users.ece.cmu.edu/~dbrumley/pdf/Cha%20et%20al._2012_Unleashing%20Mayhem%20on%20Binary%20Code.pdf][Unleashing
-  MAYHEM on Binary Code]]: How to structure a CRS, and new methods on
+- [[https://users.ece.cmu.edu/~dbrumley/pdf/Cha%20et%20al._2012_Unleashing%20Mayhem%20on%20Binary%20Code.pdf][Unleashing MAYHEM on Binary Code]]: How to structure a CRS, and new methods on
   symbolic execution
