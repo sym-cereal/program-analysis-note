@@ -1,0 +1,141 @@
+* /Analyzing Memory Accesses in x86 Executables */
+
+Value Set Analysis, aka /vsa/, is introduced by WISC in https://research.cs.wisc.edu/wpis/papers/cc04.pdf.
+
+** Issues
+
+No approach to identify the memory and variable relation in binary program from a higher level perspecitive.
+(Or how a set of memory will be manipulated)
+
+** Assumptions
+
+Basically a normal compiled binary (not self modifying like malware or packed binary).
+Check out page 5 for whole detail (/A few words are in order about the goals.../).
+
+** Concpet
+
+The VSA seprate memory values into following catagories:
+
+1. Memory Regions :: This is a section of non-overlap, consecutive memory associated with each procedure 
+(e.g. heap, stack, register, and global variable). It's represented by a pair =(memory-region, offset)=.
+We can trace them through heap/stack allocation or global variable reference.
+
+2. Abstract Location (/a-loc/) :: a-loc is like a variable from higher perspective. 
+The address of a-loc is represented by =(region, [offset, offset + size - 1])=.
+ Since the size of heap memory might not be known explicity, we use *infinity* to represent the size.
+They can be futhure tracked through memory dereference, reference.
+
+3. Abstract Store :: This operation reduces a set of a-loc to RIC, a number set converget representation, tuple.
+RIC can be represent by a tuple =(a, b, c, d)= which is =a * [b, c] + d=.
+When we fetch/store a value that is not aligned or out-of-bound to other a-loc, 
+abstact store is applied to reduce sets.
+
+VSA supports following opeartions (ascii representation):
+
+- =subset vs1 vs2=: if a vs1 (value set) is a subset of vs2
+- =intersect vs1 vs2=: return the shared part of two VS
+- =union vs1 vs2=: union two VS
+- =widening vs1 vs2=: return the VS by widening vs1 with respect to vs2
+- =adjust vs c=: adjust base value in VS by adding constant C to base
+- =getnext vs s=: return a pair of set (F, P). 
+F is the fully accessed a-loc and P is partially accessed by length s. 
+For example, there are two VS in address 1000 as A and 1004 as B and we have a 4-byte read from 1001.
+It should return A as F and B as P since it cross the boundary of 1000 and reach additional 1-byte of
+1004
+- =removelowerbounds= and =removeupperbounds=: trivial as its name
+
+** Algorithm
+
+The algorithm is shown on fig.4, but I will use the one in Bap as a more detailedexample.
+But despite reading the horrible pseudo-math notation, let's use explain word by word.
+
+The *e* stands for current edge, *c* for constants, *** for wildcard
+and *s* stands for the size of dereference.
+*Before* and *After* are basically *in* and *out* sets for edges.
+Following each cases from the paper, I will give a brief text summarize to diffrerent transfer functions.
+
+*** =R1=R2+c=
+
+#+BEGIN_SRC text
+let R2->vs BELONG e.Before
+e.After := e.Before - [R1->*] UNION [R1->adjust vs c]
+#+END_SRC
+
+First, we find all the VS (value-set) of a-loc R2 from previous edge.
+The result of the edge will kill all the previous definition of R1 by =e.Before - [R1->*]=
+(since we change R1 to new value).
+Then, we adjust the base offset from the a-loc of R2 and assign to R1 by
+=union [R1->adjust vs c]= where the =vs= is obtained from =R2= 
+since R2's base offset is increase by *c*.
+
+*** =*(R1+c1)=R2+c2=
+
+#+BEGIN_SRC text
+let [R1->vs_r1], [R2->vs_r2] BELONG e.Before, (F, P) = getnext (adjust vs_r1, c1),
+  tmp = e.Before - {[a->*] | a BELONG (P UNION F)} UNION {[p->T] | p BELONG P}, and
+  Proc be the procedure containing the statement
+if (|F| = 1 and |P| = 0 and
+    (Proc is not recursive) and (F has no heap objects)) then
+  e.After := (tmp UNION {[v->adjust vs_r2 c2] | v BELONG F})
+else
+  e.After := (tmp UNION {[v->((adjust vs_r2 c2) UNION vs_v)] | v BELONG F, [v->vs_v] BELONG e.Before})
+#+END_SRC
+
+This instruction add an address with offset (or without when *c2* = 0) to a dereference address
+(e.g. add a pointer to jump table).
+First, we fetch the VS of R1 and R2. Then since =vs_r1= deref with offset *c1*,
+It's necessary to adjust it by setting new base address regarding to *c1*.
+Following, we subtract all the accesed a-loc *F* and *P* from e.Before and union it with the
+P which is updated to *T* into new variable *tmp*.
+
+If we have only one *F* and no *P* with matched procedure, the e.After is updated with the union
+of *tmp* and *F* which contains adjusted sets of =vs_r2=.
+The other case is almost the same, except the set in *F* is also union with =vs_v= since other
+VS might not be overwritten by the opeartion.
+
+*** =R1=*(R2+c1)+c2=
+
+#+BEGIN_SRC text
+let (R2->vs_r2) BELONG e.Before AND (F, P) = getnext (adjust vs_r2 c1) s
+if |P| = 0 then
+  let vs_rhs = UNION_ALL{vs_c | v BELONG F, [v->vs_v] BELONG e.Before}
+  e.After := e.Before - [R1->*] UNION [R1->(adjust vs_rhs, c2)]
+else
+  e.After := e.Before - [R1->*] UNION [R1->T]
+#+END_SRC
+
+In this case, we set R1 to a dereference value with adjusted offset
+(e.g. the program is getting function address from jump table).
+At the beginning, we retrieve all VS of R2.
+Since we have =*(R2+c1)= which derefence a section of R2 with offset *c1*,
+we need to first adjust VS of R2 with *c1* to update its VS with new base.
+Then the dereference opeartion might get additional section,
+it's necessary to use =getnext= to check if retrieve size *s* read other boundaries.
+
+If the derefence doesn't read extra a-loc, union all the read all possible memory-region
+in the derefernce section and adjust them with offset *c2*.
+Otherwise, we consertively set all R1 to /T/.
+
+*** =R1<=c=
+
+#+BEGIN_SRC text
+let [R1->vs_r1] BELONG e.Before and vs_c = ([-infinity, c], T, .... T)
+e.After := e.Before - [R1->*] UNION [R1->vs_r1 INTERSECT vs_c]
+#+END_SRC
+
+This given us a constraint that R1 should be less than some address *c*.
+Thus, we enumberate VS of R1 and then create a constant a-loc which has *c* as highest address.
+We intersect them to make sure the result set does not have address higher than *c*.
+Still, we kill the old set and add the new result set.
+
+*** =R1>=R2=
+
+#+BEGIN_SRC text
+let [R1->vs_r1], [R2->vs_r2] BELONG e.Before AND vs_lb = RemoveUpperBounds(vs_r2)
+e.After := e.Before - [R1->*] UNION [R1->vs_r1 INTERSECT vs_lb]
+#+END_SRC
+
+The constraint is simillar to previous case. We remove the upper bound of =vs_lb=
+(simillar to add constant to lower bound in previous case) because the greater than operations
+only cares about the lower bound. Then the =r1_vs= is intersected with =vs_ln= to
+get the memory regions greater than R2.
