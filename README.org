@@ -149,6 +149,9 @@ books.
   - [[https://github.com/lifting-bits/mcsema/][mcsema]]: Translate
     binary to LLVM bytecode.
 
+- Exploitation:
+ - [[https://arxiv.org/pdf/1903.00503.pdf][Automatic Techniques to Systematically Discover New Heap Exploitation Primitives]]
+
 ** Formal Method
 
 - [[https://softwarefoundations.cis.upenn.edu/current/index.html][Software
