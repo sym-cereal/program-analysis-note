@@ -1,0 +1,63 @@
+* /Precise Interprocedural Dataﬂow Analysis via Graph Reachability/
+
+IFSD means the interprocedural, finite, distributive, subset problems framework.
+It converts a certrain set of program analysis problem to graph reachibility problems
+to enhance the performace via dynamic programming.
+
+** Issues
+
+Solved IFDS in polynominal time (more preciesly =O(ED^3)=).
+
+** Assumptions
+
+Problem must satisfy IFDS attributes (e.g. all bit-set problems, true-live varaibles,
+ and etc). Problems like pointer analysis are not suitable for such framework.
+
+** Concept
+
+I won't waste my time to talk about every theorems in the paper, you can just find the papre and read them.
+However, let's have a quick walkthrough.
+
+First, it introduces the call node and return node. Base on these two nodes, we add three other edges:
+*call-to-return*, *call-to-start* (the start node refers to where the procedure starts), and *exit-to-return*
+(the procedure quits and return). These three nodes form a supergraph, which is used for interprocedure analysis.
+
+Another concept is valid path. To be short, such path must starts from certain nodes that may go through
+certain function calls but must eventually leave those function. (see page 3). A reachable path is a
+valid path in exploded supergraph (mentioned later).
+
+Since the problems we want to solve is finite and distributive, we can use this feature to convert transfer function
+to an edge problem. For example, we want to express =(S-{a})U{b}= in graph, where S contains 4 node a, b, and c.
+We can create 4 nodes as /IN/ set and 4 nodes as /OUT/. Except {a,b,c},
+it contains an empty element (=0=) in both /IN/ and /OUT/ with following map:
++ 0 -> 0, b
++ a ->
++ b ->
++ c -> c
+
+We map the empty set to empty set because each set must contain empty as an element. Since the set is union by b,
+The empty element maps to b as well. The edge starts from 0 because b is added without any condition
+(since every set contains empty element).
+Alternatively, =a -> b= means that only when we have element a, b will be added to this set.
+Through this transformation, we convert our PA problem to a graph.
+
+Figure 2 in the paper shows the value-initialized graph after above transformations (AKA super-exploded graph).
+The node in white dot is unreachable, and the black is otherwise. Through the graph reachability,
+it can be easily determined whether a node is initialized. e.g. in n1, the x is initialized,
+which will be extracted from the uninitialized set that x is not connected any more.
+We can know at which stage the variable is uninitialized. As a result, the interprocedure analysis can be determined by
+detecting graph reachability in reachable starting from start edge.
+
+We have a special case in n2->n3 edge (the call-to-return edge): the g is not connected. However, x is connected.
+This is because g is a global variable which will be eventually used in the procedure sP.
+X is assigned to a through call-by-value, so actually the procedure won't change it and it keeps connected.
+The disconected g in n2->n2 does not mean it initialized. Recall from the previous note that reachability is considered
+in valid path. From the whole graph perspective g is still connected through (n2-> sP -> n4 > eP -> n3)
+
+Since this is a MAY analysis, the variable is still considered as uninitialized
+when a white dot and black dot meet in a node (e.g sP node is met by n7 and n2 with different stage g).
+The MUST analysis is otherwise.
+
+Finally it is the *Tabulation Algorithm*. A DP for solving IFDS. It first initializes with the start edge to the worklist.
+It extends the edges in worklist to iterate all paths. Meanwhile a set of summarized paths are stored for procedure information
+to avoid repeated analysis.
