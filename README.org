@@ -1,6 +1,6 @@
 * Program Analysis Note
 
-**
+** Reading Notes
 
 I have included my notes under /note/ folder. My interpretation might be wrong so isseus and PR are welcome.
 
@@ -118,6 +118,7 @@ books.
   Slicing Handbook]]: For some values your analyzer intereted, we can
   slice the program to find related part of the program which impacts
   thos values.
+- [[https://silverbullettt.bitbucket.io/papers/ecoop2016.pdf][Program Tailoring: Slicing by Sequential Criteria]] 
 
 ** Binary Analysis
    :PROPERTIES:
