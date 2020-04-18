@@ -4,9 +4,9 @@
 
 I have included my notes under /note/ folder. My interpretation might be wrong so isseus and PR are welcome.
 
-** Tool
+** Framework
 
-Here are some tools for program analysis. I strongly recommend you to
+Here are some frameworks for program analysis. I strongly recommend you to
 implement algorithms on them.
 
 - =LLVM=: the =Clang Static Analyzer= is a awesome tool to analyze C/C++
@@ -26,18 +26,24 @@ implement algorithms on them.
   - [[https://github.com/fkie-cad/cwe_checker][CWE-Checker]]: Binary
     analysis based on BAP
   - [[https://github.com/draperlaboratory/cbat_tools][CBAT TOOLS]]: This
-    project implements some algrotihm on BAP
+    project implements VSA and WP on BAP
   - Several papers related to BAP implementation:
     http://okmij.org/ftp/tagless-final/JFP.pdf
     http://www.cs.utexas.edu/~wcook/Drafts/2012/ecoop2012.pdf
     http://okmij.org/ftp/tagless-final/course/optimizations.html
 
 - LLVM based
-
   - [[https://github.com/klee/klee][Klee]]: Symbolic Execution based on
     LLVM
   - [[https://github.com/SVF-tools/SVF][SVF]]: Program Analysis
     Framework based on LLVM
+    
+- Soot based
+  - TODO
+    
+- [[https://github.com/facebookarchive/pfff][pfff]]: A tool set for source code analysis
+- [[https://github.com/airbus-seclab/bincat][BinCat]]
+- [[https://github.com/angr/angr][Angr]]: Binary Symbolic Executor
 
 ** Intro
 
