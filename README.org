@@ -105,6 +105,9 @@ books.
   framework
 - [[https://research.cs.wisc.edu/wpis/papers/sas03.pdf][Weighted Pushdown Systems and their Application to Interprocedural Dataflow Analysis]]: An enhanced version of IFDS
 
+** Pointer Analysis:
+- [[https://www.cs.utexas.edu/~lin/papers/pldi07.pdf][The Ant and the Grasshopper: Fast and Accurate Pointer Analysis for Millions of Lines of Code]]
+
 ** Shape Analysis;
 
 - [[https://research.cs.wisc.edu/wpis/papers/cc2000.pdf][Shape Analysis
