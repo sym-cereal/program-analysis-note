@@ -119,6 +119,10 @@ books.
   - [[https://dl.acm.org/doi/10.1145/996841.996859][Cloning-based context-sensitive pointer alias analysis using binary decision diagrams]]
 - Probability Based:
   - [[http://www.eecg.toronto.edu/~steffan/papers/asplos06.pdf][A Probabilistic Pointer Analysis for Speculative Optimizations]]
+  
+** Heap
+
+- [[https://arxiv.org/abs/1403.4910][Heap Abstractions for Static Analysis]]
 
 ** Shape Analysis;
 
