@@ -100,6 +100,8 @@ books.
   INTERPRETATION : ‘A UNIFIED LATTICE MODEL FOR STATIC ANALYSIS OF
   PROGRAMS BY CONSTRUCTION OR APPROXIMATION OF FIXPOINTS]]: The original
   paper
+- [[https://www.di.ens.fr/~cousot/AI/][A thoughtful wiki about AI]]
+- [[https://dl.acm.org/doi/pdf/10.1145/3290355][Meta Abstract Interpretation]]: Use abstract interpretation to analyze static analyzer (I guess somehow simillar to AAM)
 
 ** Dataflow Analysis
 
