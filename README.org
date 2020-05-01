@@ -94,6 +94,7 @@ books.
 
 ** Abstract Interpretation
 
+- [[https://www.di.ens.fr/~cousot/publications.www/CousotCousot-CSL-LICS-2014.pdf][Abstract Interpretation: Past, Present and Future]]
 - Abstract Interpretation Course:
   [[http://web.mit.edu/16.399/www/][16.399 by MIT]]
 - [[https://courses.cs.washington.edu/courses/cse501/15sp/papers/cousot.pdf][ABSTRACT
@@ -112,6 +113,7 @@ books.
   Interprocedural Dataflow Analysis via Graph Reachability]]: The IFDS
   framework
 - [[https://research.cs.wisc.edu/wpis/papers/sas03.pdf][Weighted Pushdown Systems and their Application to Interprocedural Dataflow Analysis]]: An enhanced version of IFDS
+- [[https://research.cs.wisc.edu/wpis/papers/tapsoft95.pdf][Precise interprocedural dataflow analysis with applications to constant propagation]: IDE framework, more general than IFDS with increasing complexity as well.
 
 ** Pointer Analysis:
 - Inclusion Based:
