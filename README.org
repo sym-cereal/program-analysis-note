@@ -21,7 +21,7 @@ implement algorithms on them.
 
 - [[https://github.com/facebook/infer][Infer]]: Source code static
   analysis based on OCaml
-  
+
 - BAP based
   - [[https://github.com/fkie-cad/cwe_checker][CWE-Checker]]: Binary
     analysis based on BAP
@@ -37,10 +37,10 @@ implement algorithms on them.
     LLVM
   - [[https://github.com/SVF-tools/SVF][SVF]]: Program Analysis
     Framework based on LLVM
-    
+
 - Soot based
   - TODO
-    
+
 - [[https://github.com/facebookarchive/pfff][pfff]]: A tool set for source code analysis
 - [[https://github.com/airbus-seclab/bincat][BinCat]]
 - [[https://github.com/angr/angr][Angr]]: Binary Symbolic Executor
@@ -113,7 +113,7 @@ books.
   Interprocedural Dataflow Analysis via Graph Reachability]]: The IFDS
   framework
 - [[https://research.cs.wisc.edu/wpis/papers/sas03.pdf][Weighted Pushdown Systems and their Application to Interprocedural Dataflow Analysis]]: An enhanced version of IFDS
-- [[https://research.cs.wisc.edu/wpis/papers/tapsoft95.pdf][Precise interprocedural dataflow analysis with applications to constant propagation]: IDE framework, more general than IFDS with increasing complexity as well.
+- [[https://research.cs.wisc.edu/wpis/papers/tapsoft95.pdf][Precise interprocedural dataflow analysis with applications to constant propagation]]: IDE framework, IDFS's cute cousin with more all-purpose but more complexity as well.
 
 ** Pointer Analysis:
 - Inclusion Based:
@@ -123,7 +123,7 @@ books.
   - [[https://dl.acm.org/doi/10.1145/996841.996859][Cloning-based context-sensitive pointer alias analysis using binary decision diagrams]]
 - Probability Based:
   - [[http://www.eecg.toronto.edu/~steffan/papers/asplos06.pdf][A Probabilistic Pointer Analysis for Speculative Optimizations]]
-  
+
 ** Heap
 
 - [[https://arxiv.org/abs/1403.4910][Heap Abstractions for Static Analysis]]
@@ -141,7 +141,7 @@ books.
   Slicing Handbook]]: For some values your analyzer intereted, we can
   slice the program to find related part of the program which impacts
   thos values.
-- [[https://silverbullettt.bitbucket.io/papers/ecoop2016.pdf][Program Tailoring: Slicing by Sequential Criteria]] 
+- [[https://silverbullettt.bitbucket.io/papers/ecoop2016.pdf][Program Tailoring: Slicing by Sequential Criteria]]
 
 ** Binary Analysis
    :PROPERTIES:
@@ -151,7 +151,7 @@ books.
 - Value Set Analysis:
 
   1. [[https://research.cs.wisc.edu/wpis/papers/cc04.pdf][Analyzing Memory Accesses in x86 Executables]]: Introduce *value-set analysis*. This analysis uses an abstract domain for representing an over-approximation of the set of values that each data object can hold at each program point.
-    
+
   2. [[https://research.cs.wisc.edu/wpis/papers/etaps08.invited.pdf][Improved Memory-Access Analysis for x86 Executables]]: An improved version of VSA.
 
   3. [[https://www.usenix.org/conference/usenixsecurity19/presentation/guo][DEEPVSA: Facilitating Value-set Analysis with Deep Learning for Postmortem Program Analysis]]: VSA + ML
@@ -159,7 +159,7 @@ books.
 - [[https://patricegodefroid.github.io/public_psfiles/icse2014.pdf][MicroX:
   Emulator for testing without input]]: A novel framework to emulate
   program without input for bug finding.
-  
+
 - Decompile (or Binary Translation):
 
   - [[http://www.phatcode.net/res/228/files/decompilation_thesis.pdf][Reverse
@@ -212,7 +212,7 @@ books.
     :END:
 
 Abstract Machine primarirly discuss about the exact execution of a
-program. 
+program.
 
 - [[http://www.inf.ed.ac.uk/teaching/courses/lsi/diehl_abstract_machines.pdf][Abstract machines for programming language implementation]]
 
