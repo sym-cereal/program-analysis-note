@@ -29,7 +29,7 @@ And it's later detected as dereference pointer, so we generate one byte for (cha
 ** Implementation
 
 TL;DR. it hooks memory operation on VM like QEMU via code instrument.
-For validating memory access, it will check whether the address is in stack/generated location (return true)
+To validate memory access, it will check whether the address is in stack/generated location (return true)
 or unknown location (return false).
 On address generation case, the address is stored in another chunk of address called *ExternalMemory*
 which will be filled with some random bytes.
@@ -42,7 +42,7 @@ which matches pointer length will be used by malloc for future address handling)
 ** Other thoughts?
 
 The paper is quite vague, but it does give us a novel insight about using heuristic memory-op based methods
-to genrate input. But the paper itself does not talk too much about dirty implementations...
+to generate input. But the paper itself does not talk too much about dirty implementations...
 Dealing global variables/variable size structure is particularly note-worthy.
 
 Recommend to read MicroX from lifting-bits or Primus from Bap to unveil more details.
@@ -50,4 +50,4 @@ Recommend to read MicroX from lifting-bits or Primus from Bap to unveil more det
 I think the approach is only useful when you have enough robust memory generation policies to avoid false positive.
 Otherwise it could be nightmare. In addition, using it with symbolic executor might be efficient
 (VM has more accurate data meanwhile SMT faces less constraints). Could try it on CTF challenges or some small binaries.
-An interesting scenario of MicroX could be modelling dynamic libraries' behavior & bugs since functions are less coupling.
+An interesting scenario of MicroX could be modelling dynamic libraries' behavior & bugs because functions are less coupling.
