@@ -114,6 +114,7 @@ books.
   framework
 - [[https://research.cs.wisc.edu/wpis/papers/sas03.pdf][Weighted Pushdown Systems and their Application to Interprocedural Dataflow Analysis]]: An enhanced version of IFDS
 - [[https://research.cs.wisc.edu/wpis/papers/tapsoft95.pdf][Precise interprocedural dataflow analysis with applications to constant propagation]]: IDE framework, IDFS's cute cousin with more all-purpose but more complexity as well.
+- [[https://link.springer.com/content/pdf/10.1007/3-540-52592-0_76.pdf][The Value Flow Graph: A Program Representation for Optimal Program Transformations]: Value Flow Graphs represent semantic equivalence of terms syntactically. This allows us to feed the knowledge of semantic equivalence into syntactic algorithms. 
 
 ** Pointer Analysis:
 - Inclusion Based:
@@ -224,3 +225,5 @@ program.
 
 - [[https://users.ece.cmu.edu/~dbrumley/pdf/Cha%20et%20al._2012_Unleashing%20Mayhem%20on%20Binary%20Code.pdf][Unleashing MAYHEM on Binary Code]]: How to structure a CRS, and new methods on
   symbolic execution
+
+- [[https://www.itu.dk/people/sestoft/pebook/jonesgomardsestoft-a4.pdf][Partial Evaluation]]
