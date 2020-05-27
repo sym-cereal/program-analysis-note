@@ -124,6 +124,7 @@ books.
   - [[https://dl.acm.org/doi/10.1145/996841.996859][Cloning-based context-sensitive pointer alias analysis using binary decision diagrams]]
 - Probability Based:
   - [[http://www.eecg.toronto.edu/~steffan/papers/asplos06.pdf][A Probabilistic Pointer Analysis for Speculative Optimizations]]
+- [[https://llvm.org/pubs/2007-06-10-PLDI-DSA.pdf][Making Context-sensitive Points-to Analysis with Heap Cloning Practical For The Real World]]
 
 ** Heap
 
@@ -177,10 +178,10 @@ books.
 - Exploitation:
  - [[https://arxiv.org/pdf/1903.00503.pdf][Automatic Techniques to Systematically Discover New Heap Exploitation Primitives]]
 
-** Formal Method
+** Formal Verification
 
 - [[https://softwarefoundations.cis.upenn.edu/current/index.html][Software
-  Foundation]]: Formal method all in one
+  Foundation]]: Proof Assitance all in one
 
 ** PA + Security
    :PROPERTIES:
@@ -196,6 +197,9 @@ books.
 
   - [[https://www.cs.cmu.edu/~rvantond/pdfs/saluki-bar-2018.pdf][Saluki
     Taint Analysis]]
+
+** Fuzz
+  - [[https://dl.acm.org/doi/pdf/10.1145/2976749.2978428][Coverage-based Greybox Fuzzing as Markov Chain]]
 
 ** Related Stuff
 

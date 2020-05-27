@@ -1,0 +1,961 @@
+* Intro
+  :PROPERTIES:
+  :CUSTOM_ID: intro
+  :END:
+
+Gonna to implement some IFDS stuff, so let's review a mature framework
+first. I have shared IFDS note on my github, so better check out the
+original paper or my github note (scribble tho).
+
+#+BEGIN_QUOTE
+  I have Java PTSD and never use Soot before, so might have some
+  mistakes
+#+END_QUOTE
+
+* Example Usage
+  :PROPERTIES:
+  :CUSTOM_ID: example-usage
+  :END:
+
+The following code is copied from
+[[https://github.com/Sable/heros/wiki/Example%3A-Using-Heros-with-Soot][heros
+wiki]]:
+
+#+BEGIN_SRC java
+  public class IFDSDataFlowTransformer extends SceneTransformer {
+      @Override
+      protected void internalTransform(String phaseName, Map<String, String> options) {
+          JimpleBasedInterproceduralCFG icfg= new JimpleBasedInterproceduralCFG();
+          IFDSTabulationProblem<Unit, Pair<Value,
+                  Set<DefinitionStmt>>, SootMethod,
+                  InterproceduralCFG<Unit, SootMethod>> problem = new IFDSReachingDefinitions(icfg);
+
+          IFDSSolver<Unit, Pair<Value, Set<DefinitionStmt>>,
+                  SootMethod, InterproceduralCFG<Unit, SootMethod>> solver =
+                      new IFDSSolver<Unit, Pair<Value, Set<DefinitionStmt>>, SootMethod,
+                                     InterproceduralCFG<Unit, SootMethod>>(problem);
+
+          System.out.println("Starting solver");
+          solver.solve();
+          System.out.println("Done");
+      }
+  }
+#+END_SRC
+
+To use in soot, we have to extend the class =SceneTransformer= then
+overwrite the =internalTransform= to begin our analysis. The /icfg/,
+which is a must provided inter-procedural CFG, is implemented by soot
+class =JimpleBaswedInterproceduralCFG=(+come on why not just
+=JimpleICFG=+). The =IFDSReachingDefinitions= is a predefined solution
+to reaching-def via IFDS and initialized as =IFDSTabulationProblem=. The
+final step is to use IFDSSolver to load the =IFDS...Problem=(too long to
+type) and solve it. Clearly we have three important classes to dive in:
+=IFDSReachDef=, =IFDS...Problem=, and =IFDSSolve=.
+
+Let's take a look at dir structure:
+
+#+BEGIN_EXAMPLE
+  edgefunc/  -> define the edge
+  fieldsens/ -> resolve some context issues here
+  flowfunc/  -> flow functions
+  solver/    -> solve the IFDS problem
+  template/  -> example template for IFDS and IDE
+  util/      -> some soot util
+  utilites   -> sth like above
+  ...        -> and the remaining files are some general interfaces
+#+END_EXAMPLE
+
+The directory names are =haveJavaStlyeVerboseName() == false= now, good.
+
+* General Interfaces
+  :PROPERTIES:
+  :CUSTOM_ID: general-interfaces
+  :END:
+
+- =EdgeFunction=: This func merge two edges through composition or
+  meeting. Another similar class is =EdgeFunctions= that specializes
+  edge functions for /normal edge/, /call edge/, /return edge/, /call
+  edge/, and /call-to-return edge/. =EdgeFunctionCache= provides
+  mechanisms for caching (or can we use memorized functions as
+  substitutions?) in advantage of the attributes of IFDS.
+- =FlowFunction=: A flow function computes which of the finitely many
+  D-type values are reachable from the current source values (copied
+  from comment). It has a cache interface and specialized interface as
+  the above function.
+- =IDETabulationProblem= and =IFDSTabulationProblem= are the user
+  interfaces for describing your problem, both of which extend from
+  =SolverConfiguration=. We will shortly see an example implementation
+  from Soot. The IFDS requires us to define flow func and iCFG. On top
+  of that edge func, meet lattice, and topfunc are required in IDE.
+  Besides that the interface has generic type =N=, =D=, =M=, =L=, and
+  =I= that corresponds to CFG node, finiteset of program symbols,
+  conversion from symbols to lattice, user-defined lattice, and iCFG.
+- =InterproceduralCFG= describes the CFG and node attributes as well.
+- =solver/JumpFunctions= acts like /PathEdge/ with forward/backward
+  lookup for search optimization.
+
+The primary difference between =EdgeFunction= and =FlowFunction= is that
+the first is for mapping concrete value whereas the second for abstract
+value (IFDSSolver uses ZeroValue to convert them; IDESolver requires
+user's implementation). Most of the remaining are helper interfaces that
+can be inferred usages from names. Basically it uses lots of interface
+wrapper to implement currying.
+
+* =IFDSReachingDefinitions= - IFDS Problem Construction
+  :PROPERTIES:
+  :CUSTOM_ID: ifdsreachingdefinitions---ifds-problem-construction
+  :END:
+
+The
+[[https://github.com/Sable/soot/blob/master/src/main/java/soot/jimple/toolkits/ide/exampleproblems/IFDSReachingDefinitions.java][link]]
+to source code.
+
+This class extends from =DefaultJimpleIFDSTabulationProblem= which is
+derived from =DefaultIFDSTabulationProblem= that can be found in
+=tempalte= folder of Heros. So we shall take a look at the base class
+first:
+
+#+BEGIN_SRC java
+  public abstract class DefaultIFDSTabulationProblem<N,D,M, I extends InterproceduralCFG<N,M>> implements IFDSTabulationProblem<N,D,M,I> {
+      private final I icfg;
+      private FlowFunctions<N,D,M> flowFunctions;
+      private D zeroValue;
+      protected abstract FlowFunctions<N, D, M> createFlowFunctionsFactory();
+      protected abstract D createZeroValue();
+      ...
+
+  }
+#+END_SRC
+
+I have removed useless getter functions. Clearly, this abstract class
+defines several members necessary for IFDS calculation. No move back to
+=IFDSReachingDefinition=:
+
+#+BEGIN_SRC java
+  public class IFDSReachingDefinitions
+      extends DefaultJimpleIFDSTabulationProblem<Pair<Value, Set<DefinitionStmt>>, InterproceduralCFG<Unit, SootMethod>> {...
+#+END_SRC
+
+In =IFDSTabulationInterface=, =N= matches soot.Unit, =M= to =SootMethod=
+(defined in =DefaultJimpleIFDSTabulationProblem=), D to a tuple of
+value/set, and =I= to =InterproceduralCFG=. The =createZeroValue= method
+is fairly simple - just return an empty set:
+
+#+BEGIN_SRC java
+  public Pair<Value, Set<DefinitionStmt>> createZeroValue() {
+      return new Pair<Value, Set<DefinitionStmt>>(new JimpleLocal("<<zero>>", NullType.v()),
+          Collections.<DefinitionStmt>emptySet());
+  }
+#+END_SRC
+
+Initial seeds tell the solver where and how to start first, which is of
+course the first statement of main with empty value:
+
+#+BEGIN_SRC java
+  public Map<Unit, Set<Pair<Value, Set<DefinitionStmt>>>> initialSeeds() {
+      return DefaultSeeds.make(Collections.singleton(Scene.v().getMainMethod().getActiveBody().getUnits().getFirst()),
+          zeroValue());
+  }
+#+END_SRC
+
+The longest one should be flow function initialization:
+
+#+BEGIN_SRC java
+  public FlowFunctions<Unit, Pair<Value, Set<DefinitionStmt>>, SootMethod> createFlowFunctionsFactory() {
+    return new FlowFunctions<Unit, Pair<Value, Set<DefinitionStmt>>, SootMethod>() {
+        ... // many lines
+       };
+  }
+#+END_SRC
+
+The first part is =getNormalFlowFunction=. It defines reaching
+definition in flow functions (details in my comments):
+
+#+BEGIN_SRC java
+  @Override
+  public FlowFunction<Pair<Value, Set<DefinitionStmt>>> getNormalFlowFunction(final Unit curr, Unit succ) {
+
+    // if we have definition, describe as above
+    if (curr instanceof DefinitionStmt) {
+      // type conversion
+      final DefinitionStmt assignment = (DefinitionStmt) curr;
+
+      return new FlowFunction<Pair<Value, Set<DefinitionStmt>>>() {
+        @Override
+        public Set<Pair<Value, Set<DefinitionStmt>>> computeTargets(Pair<Value, Set<DefinitionStmt>> source) {
+          // if it is not a zero value (empty set in IFDS)
+          if (source != zeroValue()) {
+            // if the assignment kills our original values
+            if (source.getO1().equivTo(assignment.getLeftOp())) {
+              // return empty so it is not reachable
+              return Collections.emptySet();
+            }
+            // keep the same otherwise (we map new value in zeroValue so no need to do it here)
+            return Collections.singleton(source);
+          } else {
+            // add value to dataflow on the other case
+            LinkedHashSet<Pair<Value, Set<DefinitionStmt>>> res = new LinkedHashSet<Pair<Value, Set<DefinitionStmt>>>();
+            res.add(new Pair<Value, Set<DefinitionStmt>>(assignment.getLeftOp(),
+                Collections.<DefinitionStmt>singleton(assignment)));
+            return res;
+          }
+        }
+      };
+    }
+
+    // if this is not an assignment just return same stuff
+    return Identity.v();
+  }
+#+END_SRC
+
+=getCallFlowFunction= computes the flow of a call function. It collects
+all the arguments first. If the source is one of them, we use
+equivalence value to mark them as the same. Otherwise just return empty
+set:
+
+#+BEGIN_SRC java
+  @Override
+  public FlowFunction<Pair<Value, Set<DefinitionStmt>>> getCallFlowFunction(Unit callStmt,
+      final SootMethod destinationMethod) {
+    Stmt stmt = (Stmt) callStmt;
+    InvokeExpr invokeExpr = stmt.getInvokeExpr();
+    final List<Value> args = invokeExpr.getArgs();
+
+    final List<Local> localArguments = new ArrayList<Local>(args.size());
+    for (Value value : args) {
+      if (value instanceof Local) {
+        localArguments.add((Local) value);
+      } else {
+        localArguments.add(null);
+      }
+    }
+
+    return new FlowFunction<Pair<Value, Set<DefinitionStmt>>>() {
+
+      @Override
+      public Set<Pair<Value, Set<DefinitionStmt>>> computeTargets(Pair<Value, Set<DefinitionStmt>> source) {
+        if (!destinationMethod.getName().equals("<clinit>")
+            && !destinationMethod.getSubSignature().equals("void run()")) {
+          if (localArguments.contains(source.getO1())) {
+            int paramIndex = args.indexOf(source.getO1());
+            Pair<Value, Set<DefinitionStmt>> pair = new Pair<Value, Set<DefinitionStmt>>(
+                new EquivalentValue(
+                    Jimple.v().newParameterRef(destinationMethod.getParameterType(paramIndex), paramIndex)),
+                source.getO2());
+            return Collections.singleton(pair);
+          }
+        }
+
+        return Collections.emptySet();
+      }
+    };
+  }
+#+END_SRC
+
+=getReturnFlowFunction= builds the return edge flow; and
+=getCallToReturnFlowFunction= summarizes the call-return edge. The code
+logic is too straightforward to explain:
+
+#+BEGIN_SRC java
+  @Override
+  public FlowFunction<Pair<Value, Set<DefinitionStmt>>> getCallToReturnFlowFunction(Unit callSite, Unit returnSite) {
+    if (!(callSite instanceof DefinitionStmt)) {
+      return Identity.v();
+    }
+
+    final DefinitionStmt definitionStmt = (DefinitionStmt) callSite;
+    return new FlowFunction<Pair<Value, Set<DefinitionStmt>>>() {
+
+      @Override
+      public Set<Pair<Value, Set<DefinitionStmt>>> computeTargets(Pair<Value, Set<DefinitionStmt>> source) {
+        if (source.getO1().equivTo(definitionStmt.getLeftOp())) {
+          return Collections.emptySet();
+        } else {
+          return Collections.singleton(source);
+        }
+      }
+    };
+  }
+
+
+  @Override
+  public FlowFunction<Pair<Value, Set<DefinitionStmt>>> getCallToReturnFlowFunction(Unit callSite, Unit returnSite) {
+    if (!(callSite instanceof DefinitionStmt)) {
+      return Identity.v();
+    }
+
+    final DefinitionStmt definitionStmt = (DefinitionStmt) callSite;
+    return new FlowFunction<Pair<Value, Set<DefinitionStmt>>>() {
+
+      @Override
+      public Set<Pair<Value, Set<DefinitionStmt>>> computeTargets(Pair<Value, Set<DefinitionStmt>> source) {
+        if (source.getO1().equivTo(definitionStmt.getLeftOp())) {
+          return Collections.emptySet();
+        } else {
+          return Collections.singleton(source);
+        }
+      }
+    };
+  }
+#+END_SRC
+
+* =IFDSSolver= - IFDS Problem Solver
+  :PROPERTIES:
+  :CUSTOM_ID: ifdssolver---ifds-problem-solver
+  :END:
+
+The paper uses a parallel implementation of IDE/IFDS from this
+[[https://link.springer.com/content/pdf/10.1007%2F978-3-642-11970-5.pdf][paper]].
+The detailed of two phase can be found in
+[[https://research.cs.wisc.edu/wpis/papers/tapsoft95.pdf][original
+paper]]
+
+** A Quick Tour to =IFDSSolver=
+   :PROPERTIES:
+   :CUSTOM_ID: a-quick-tour-to-ifdssolver
+   :END:
+
+=IFDSSolver= is defined under =Solver= folder extended from =IDESolver=
+with implementation of the missing parts - meet lattice and edge
+function. And the remaining is boring initialization:
+
+#+BEGIN_SRC java
+  public class IFDSSolver<N,D,M,I extends InterproceduralCFG<N, M>> extends IDESolver<N,D,M,IFDSSolver.BinaryDomain,I> {
+      // just a trivial top-bottom lattice
+      protected static enum BinaryDomain { TOP,BOTTOM }
+      ...
+      ...
+         public MeetLattice<BinaryDomain> meetLattice() {
+             return new MeetLattice<BinaryDomain>() {
+
+                 public BinaryDomain topElement() {
+                     return BinaryDomain.TOP;
+                 }
+
+                 public BinaryDomain bottomElement() {
+                     return BinaryDomain.BOTTOM;
+                 }
+
+                 public BinaryDomain meet(BinaryDomain left, BinaryDomain right) {
+                     if(left==TOP && right==TOP) {
+                         return TOP;
+                     } else {
+                         return BOTTOM;
+                     }
+                 }
+             };
+         }
+    ...
+         class IFDSEdgeFunctions implements EdgeFunctions<N,D,M,BinaryDomain> {
+
+             // zero value means undefined value which is bottom
+             // otherwise return edge identitu
+             public EdgeFunction<BinaryDomain> getNormalEdgeFunction(N src,D srcNode,N tgt,D tgtNode) {
+                 if(srcNode==ifdsProblem.zeroValue()) return ALL_BOTTOM;
+                 return EdgeIdentity.v();
+             }
+
+             ... // remaining edge functions share the same logic
+         }
+    ...
+  }
+#+END_SRC
+
+** The Initialization
+   :PROPERTIES:
+   :CUSTOM_ID: the-initialization
+   :END:
+
+Let's continue tracing. =IDESolver= is a long file with around 1k code.
+So we begin with constructor. Besides some familiar classes, it uses
+=ZeroedFlowFunction=(an extra wrapper to map zero value) and
+=JumpFunction=(helper class for memorization of function results). If
+the CacheBuilder is enabled, flow function is wrapped up by
+=XXXFunctionCache= for caching:
+
+#+BEGIN_SRC java
+  public IDESolver(IDETabulationProblem<N,D,M,V,I> tabulationProblem, @SuppressWarnings("rawtypes") CacheBuilder flowFunctionCacheBuilder, @SuppressWarnings("rawtypes") CacheBuilder edgeFunctionCacheBuilder) {
+      // debugger option
+      if(logger.isDebugEnabled()) {
+          if(flowFunctionCacheBuilder != null)
+              flowFunctionCacheBuilder = flowFunctionCacheBuilder.recordStats();
+          if(edgeFunctionCacheBuilder != null)
+              edgeFunctionCacheBuilder = edgeFunctionCacheBuilder.recordStats();
+      }
+      this.zeroValue = tabulationProblem.zeroValue();
+      this.icfg = tabulationProblem.interproceduralCFG();
+      FlowFunctions<N, D, M> flowFunctions = tabulationProblem.autoAddZero() ?
+              new ZeroedFlowFunctions<N,D,M>(tabulationProblem.flowFunctions(), tabulationProblem.zeroValue()) : tabulationProblem.flowFunctions();
+      EdgeFunctions<N, D, M, V> edgeFunctions = tabulationProblem.edgeFunctions();
+      if(flowFunctionCacheBuilder!=null) {
+          ffCache = new FlowFunctionCache<N,D,M>(flowFunctions, flowFunctionCacheBuilder);
+          flowFunctions = ffCache;
+      } else {
+          ffCache = null;
+      }
+      if(edgeFunctionCacheBuilder!=null) {
+          efCache = new EdgeFunctionCache<N,D,M,V>(edgeFunctions, edgeFunctionCacheBuilder);
+          edgeFunctions = efCache;
+      } else {
+          efCache = null;
+      }
+      this.flowFunctions = flowFunctions;
+      this.edgeFunctions = edgeFunctions;
+      this.initialSeeds = tabulationProblem.initialSeeds();
+      this.unbalancedRetSites = Collections.synchronizedSet(new LinkedHashSet<N>());
+      this.valueLattice = tabulationProblem.meetLattice();
+      this.allTop = tabulationProblem.allTopFunction();
+      this.jumpFn = new JumpFunctions<N,D,V>(allTop);
+      this.followReturnsPastSeeds = tabulationProblem.followReturnsPastSeeds();
+      this.numThreads = Math.max(1,tabulationProblem.numThreads());
+      this.computeValues = tabulationProblem.computeValues();
+      this.executor = getExecutor();
+      this.recordEdges = tabulationProblem.recordEdges();
+  }
+#+END_SRC
+
+** The Solver
+   :PROPERTIES:
+   :CUSTOM_ID: the-solver
+   :END:
+
+Then we call =solve= which calls two function:
+
+#+BEGIN_SRC java
+  public void solve() {
+      submitInitialSeeds();
+      awaitCompletionComputeValuesAndShutdown();
+  }
+#+END_SRC
+
+Initialization from =initialSeeds= begins here along with propagation:
+
+#+BEGIN_SRC java
+  protected void submitInitialSeeds() {
+      // for each entry. we only set the first instruction of main previously
+      for(Entry<N, Set<D>> seed: initialSeeds.entrySet()) {
+          N startPoint = seed.getKey();
+          for(D val: seed.getValue()) {
+              propagate(zeroValue, startPoint, val, EdgeIdentity.<V>v(), null, false);
+          }
+          // add a function to jumpFn for caching
+          jumpFn.addFunction(zeroValue, startPoint, zeroValue, EdgeIdentity.<V>v());
+      }
+  }
+#+END_SRC
+
+=propagate= is the most crucial function which will be reused multiple
+times. It corresponses to the =propagate= from the paper except the
+synchronizing. If the /fPrime/ has changed after merging, both of
+=jumpFn= and =worklist= are extended. Since the calculation is
+distributive, we can take advantage of async for faster processing:
+
+#+BEGIN_SRC java
+  protected void propagate(D sourceVal, N target, D targetVal, EdgeFunction<V> f,
+      /* deliberately exposed to clients */ N relatedCallSite,
+      /* deliberately exposed to clients */ boolean isUnbalancedReturn) {
+      EdgeFunction<V> jumpFnE;
+      EdgeFunction<V> fPrime;
+      boolean newFunction;
+      synchronized (jumpFn) {
+          jumpFnE = jumpFn.reverseLookup(target, targetVal).get(sourceVal);
+          if(jumpFnE==null) jumpFnE = allTop; //JumpFn is initialized to all-top (see line [2] in SRH96 paper)
+          fPrime = jumpFnE.meetWith(f);
+          newFunction = !fPrime.equalTo(jumpFnE);
+          if(newFunction) {
+              jumpFn.addFunction(sourceVal, target, targetVal, fPrime); // add to path functions
+          }
+      }
+
+      // add to worklist
+      if(newFunction) {
+          PathEdge<N,D> edge = new PathEdge<N,D>(sourceVal, target, targetVal); // a small wrapper
+          scheduleEdgeProcessing(edge); // send to work list
+
+          if(targetVal!=zeroValue) {
+              logger.trace("{} - EDGE: <{},{}> -> <{},{}> - {}", getDebugName(), icfg.getMethodOf(target), sourceVal, target, targetVal, fPrime );
+          }
+      }
+  }
+#+END_SRC
+
+The =scheduleEdgeProcessing= will eventually call
+=PathEdgeProcessingTask= which is equivalent to the inner part of
+=while Whorlist != empty= in =ComputePathFunctions=. It splits into
+three cases: call statement, exit statement, and non-terminated normal
+statement:
+
+#+BEGIN_SRC java
+  protected void scheduleEdgeProcessing(PathEdge<N,D> edge){
+      // If the executor has been killed, there is little point
+      // in submitting new tasks
+      if (executor.isTerminating())
+          return;
+      executor.execute(new PathEdgeProcessingTask(edge));
+      propagationCount++;
+  }
+
+  private class PathEdgeProcessingTask implements Runnable {
+      private final PathEdge<N,D> edge;
+
+      public PathEdgeProcessingTask(PathEdge<N,D> edge) {
+          this.edge = edge;
+      }
+
+      public void run() {
+          if(icfg.isCallStmt(edge.getTarget())) {
+              processCall(edge);
+          } else {
+              //note that some statements, such as "throw" may be
+              //both an exit statement and a "normal" statement
+              if(icfg.isExitStmt(edge.getTarget())) {
+                  processExit(edge);
+              }
+              if(!icfg.getSuccsOf(edge.getTarget()).isEmpty()) {
+                  processNormalFlow(edge);
+              }
+          }
+      }
+  }
+#+END_SRC
+
+*** =processNormalFlow=
+    :PROPERTIES:
+    :CUSTOM_ID: processnormalflow
+    :END:
+
+The other two are too long. We begin with an easier function first. It
+retrieve the next statements. Then each node is computed by flow
+function stored in =res=. Then for each of =res= we apply edge function
+and propagate again for final result (only useful for IDE):
+
+#+BEGIN_SRC java
+  private void processNormalFlow(PathEdge<N,D> edge) {
+      final D d1 = edge.factAtSource();
+      final N n = edge.getTarget();
+      final D d2 = edge.factAtTarget();
+
+      EdgeFunction<V> f = jumpFunction(edge);
+      for (N m : icfg.getSuccsOf(n)) {
+          FlowFunction<D> flowFunction = flowFunctions.getNormalFlowFunction(n,m);
+          flowFunctionConstructionCount++;
+          Set<D> res = computeNormalFlowFunction(flowFunction, d1, d2);
+          saveEdges(n, m, d2, res, false);
+          for (D d3 : res) {
+              EdgeFunction<V> fprime = f.composeWith(edgeFunctions.getNormalEdgeFunction(n, d2, m, d3));
+              propagate(d1, m, d3, fprime, null, false);
+          }
+      }
+  }
+#+END_SRC
+
+=saveEdges= function save and update state of =n= and =m=, for debugging
+purpose:
+
+#+BEGIN_SRC java
+  private void saveEdges(N sourceNode, N sinkStmt, D sourceVal, Set<D> destVals, boolean interP) {
+      if(!this.recordEdges) {
+          return;
+      }
+      Table<N, N, Map<D, Set<D>>> tgtMap = interP ? computedInterPEdges : computedIntraPEdges;
+      synchronized (tgtMap) {
+          Map<D,Set<D>> map = tgtMap.get(sourceNode, sinkStmt);
+          if(map == null) {
+              map = new LinkedHashMap<D, Set<D>>();
+              tgtMap.put(sourceNode, sinkStmt, map);
+          }
+          map.put(sourceVal, new LinkedHashSet<D>(destVals));
+      }
+  }
+#+END_SRC
+
+*** =processCall= and =processExit=
+    :PROPERTIES:
+    :CUSTOM_ID: processcall-and-processexit
+    :END:
+
+Both of them handle special edges from super CFG. The first one seems
+non-trivial:
+
+#+BEGIN_SRC java
+  private void processCall(PathEdge<N,D> edge) {
+      final D d1 = edge.factAtSource();
+      final N n = edge.getTarget(); // a call node; line 14...
+
+      final D d2 = edge.factAtTarget();
+      EdgeFunction<V> f = jumpFunction(edge);
+      Collection<N> returnSiteNs = icfg.getReturnSitesOfCallAt(n);
+
+      //for each possible callee
+      Collection<M> callees = icfg.getCalleesOfCallAt(n);
+      for(M sCalledProcN: callees) { //still line 14
+
+          //compute the call-flow function
+          FlowFunction<D> function = flowFunctions.getCallFlowFunction(n, sCalledProcN);
+          flowFunctionConstructionCount++;
+          Set<D> res = computeCallFlowFunction(function, d1, d2);
+          //for each callee's start point(s)
+          Collection<N> startPointsOf = icfg.getStartPointsOf(sCalledProcN);
+          for(N sP: startPointsOf) {
+              //for each result node of the call-flow function
+              for(D d3: res) {
+                  //create initial self-loop
+                  propagate(d3, sP, d3, EdgeIdentity.<V>v(), n, false); //line 15
+
+                  //register the fact that <sp,d3> has an incoming edge from <n,d2>
+                  Set<Cell<N, D, EdgeFunction<V>>> endSumm;
+                  synchronized (incoming) {
+                      //line 15.1 of Naeem/Lhotak/Rodriguez
+                      addIncoming(sP,d3,n,d2);
+                      //line 15.2, copy to avoid concurrent modification exceptions by other threads
+                      endSumm = new LinkedHashSet<Table.Cell<N,D,EdgeFunction<V>>>(endSummary(sP, d3));
+                  }
+
+                  //still line 15.2 of Naeem/Lhotak/Rodriguez
+                  //for each already-queried exit value <eP,d4> reachable from <sP,d3>,
+                  //create new caller-side jump functions to the return sites
+                  //because we have observed a potentially new incoming edge into <sP,d3>
+                  for(Cell<N, D, EdgeFunction<V>> entry: endSumm) {
+                      N eP = entry.getRowKey();
+                      D d4 = entry.getColumnKey();
+                      EdgeFunction<V> fCalleeSummary = entry.getValue();
+                      //for each return site
+                      for(N retSiteN: returnSiteNs) {
+                          //compute return-flow function
+                          FlowFunction<D> retFunction = flowFunctions.getReturnFlowFunction(n, sCalledProcN, eP, retSiteN);
+                          flowFunctionConstructionCount++;
+                          Set<D> returnedFacts = computeReturnFlowFunction(retFunction, d3, d4, n, Collections.singleton(d2));
+                          //for each target value of the function
+                          for(D d5: returnedFacts) {
+                              //update the caller-side summary function
+                              EdgeFunction<V> f4 = edgeFunctions.getCallEdgeFunction(n, d2, sCalledProcN, d3);
+                              EdgeFunction<V> f5 = edgeFunctions.getReturnEdgeFunction(n, sCalledProcN, eP, d4, retSiteN, d5);
+                              EdgeFunction<V> fPrime = f4.composeWith(fCalleeSummary).composeWith(f5);
+                              D d5_restoredCtx = restoreContextOnReturnedFact(n, d2, d5);
+                              propagate(d1, retSiteN, d5_restoredCtx, f.composeWith(fPrime), n, false);
+                          }
+                      }
+                  }
+              }
+          }
+      }
+      //line 17-19 of Naeem/Lhotak/Rodriguez
+      //process intra-procedural flows along call-to-return flow functions
+      for (N returnSiteN : returnSiteNs) {
+          FlowFunction<D> callToReturnFlowFunction = flowFunctions.getCallToReturnFlowFunction(n, returnSiteN);
+          flowFunctionConstructionCount++;
+          Set<D> returnFacts = computeCallToReturnFlowFunction(callToReturnFlowFunction, d1, d2);
+          for(D d3: returnFacts) {
+              EdgeFunction<V> edgeFnE = edgeFunctions.getCallToReturnEdgeFunction(n, d2, returnSiteN, d3);
+              propagate(d1, returnSiteN, d3, f.composeWith(edgeFnE), n, false);
+          }
+      }
+  }
+#+END_SRC
+
+The function behaves as: 1. The function initializes required data,
+including the callee and return site 2. For each callee (calculating the
+callee function dataflow): - compute the source to call dataflow =res= -
+for each start point of the function (we have multiple starts in
+backward analysis): + for each flow target: - propagate startpoint with
+dataflow fact by =res= - add callsite and startpoints to incoming edges,
+which is later used - for each return site, we build a new summary edge
+from the call node 3. in another loop, we propagate the call to return
+site (calculating the node after the call in the body of caller)
+
+While the =processExit= mostly does (the code is actually more than the
+first one but many similar logic so I won't explain more...): 1. Add the
+node to the EndSummary 2. Propagate the returnSite dataflow value 3. A
+special case to handle unbalanced incoming flow. Zero is propagated as
+default value
+
+#+BEGIN_SRC java
+  protected void processExit(PathEdge<N,D> edge) {
+      final N n = edge.getTarget(); // an exit node; line 21...
+      EdgeFunction<V> f = jumpFunction(edge);
+      M methodThatNeedsSummary = icfg.getMethodOf(n);
+
+      final D d1 = edge.factAtSource();
+      final D d2 = edge.factAtTarget();
+
+      //for each of the method's start points, determine incoming calls
+      Collection<N> startPointsOf = icfg.getStartPointsOf(methodThatNeedsSummary);
+      Map<N,Set<D>> inc = new LinkedHashMap<N,Set<D>>();
+      for(N sP: startPointsOf) {
+          //line 21.1 of Naeem/Lhotak/Rodriguez
+
+          //register end-summary
+          synchronized (incoming) {
+              addEndSummary(sP, d1, n, d2, f);
+              //copy to avoid concurrent modification exceptions by other threads
+              for (Entry<N, Set<D>> entry : incoming(d1, sP).entrySet())
+                  inc.put(entry.getKey(), new LinkedHashSet<D>(entry.getValue()));
+          }
+      }
+
+      //for each incoming call edge already processed
+      //(see processCall(..))
+      for (Entry<N,Set<D>> entry: inc.entrySet()) {
+          //line 22
+          N c = entry.getKey();
+          //for each return site
+          for(N retSiteC: icfg.getReturnSitesOfCallAt(c)) {
+              //compute return-flow function
+              FlowFunction<D> retFunction = flowFunctions.getReturnFlowFunction(c, methodThatNeedsSummary,n,retSiteC);
+              flowFunctionConstructionCount++;
+              //for each incoming-call value
+              for(D d4: entry.getValue()) {
+                  Set<D> targets = computeReturnFlowFunction(retFunction, d1, d2, c, entry.getValue());
+                  //for each target value at the return site
+                  //line 23
+                  for(D d5: targets) {
+                      //compute composed function
+                      EdgeFunction<V> f4 = edgeFunctions.getCallEdgeFunction(c, d4, icfg.getMethodOf(n), d1);
+                      EdgeFunction<V> f5 = edgeFunctions.getReturnEdgeFunction(c, icfg.getMethodOf(n), n, d2, retSiteC, d5);
+                      EdgeFunction<V> fPrime = f4.composeWith(f).composeWith(f5);
+                      //for each jump function coming into the call, propagate to return site using the composed function
+                      synchronized (jumpFn) { // some other thread might change jumpFn on the way
+                          for(Map.Entry<D,EdgeFunction<V>> valAndFunc: jumpFn.reverseLookup(c,d4).entrySet()) {
+                              EdgeFunction<V> f3 = valAndFunc.getValue();
+                              if(!f3.equalTo(allTop)) {
+                                  D d3 = valAndFunc.getKey();
+                                  D d5_restoredCtx = restoreContextOnReturnedFact(c, d4, d5);
+                                  propagate(d3, retSiteC, d5_restoredCtx, f3.composeWith(fPrime), c, false);
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+
+      //handling for unbalanced problems where we return out of a method with a fact for which we have no incoming flow
+      //note: we propagate that way only values that originate from ZERO, as conditionally generated values should only
+      //be propagated into callers that have an incoming edge for this condition
+      if(followReturnsPastSeeds && inc.isEmpty() && d1.equals(zeroValue)) {
+          // only propagate up if we
+              Collection<N> callers = icfg.getCallersOf(methodThatNeedsSummary);
+              for(N c: callers) {
+                  for(N retSiteC: icfg.getReturnSitesOfCallAt(c)) {
+                      FlowFunction<D> retFunction = flowFunctions.getReturnFlowFunction(c, methodThatNeedsSummary,n,retSiteC);
+                      flowFunctionConstructionCount++;
+                      Set<D> targets = computeReturnFlowFunction(retFunction, d1, d2, c, Collections.singleton(zeroValue));
+                      saveEdges(n, retSiteC, d2, targets, true);
+                      for(D d5: targets) {
+                          EdgeFunction<V> f5 = edgeFunctions.getReturnEdgeFunction(c, icfg.getMethodOf(n), n, d2, retSiteC, d5);
+                          propagateUnbalancedReturnFlow(retSiteC, d5, f.composeWith(f5), c);
+                          //register for value processing (2nd IDE phase)
+                          unbalancedRetSites.add(retSiteC);
+                      }
+                  }
+              }
+              //in cases where there are no callers, the return statement would normally not be processed at all;
+              //this might be undesirable if the flow function has a side effect such as registering a taint;
+              //instead we thus call the return flow function will a null caller
+              if(callers.isEmpty()) {
+                  FlowFunction<D> retFunction = flowFunctions.getReturnFlowFunction(null, methodThatNeedsSummary,n,null);
+                  flowFunctionConstructionCount++;
+                  retFunction.computeTargets(d2);
+              }
+          }
+      }
+#+END_SRC
+
+** Finalization
+   :PROPERTIES:
+   :CUSTOM_ID: finalization
+   :END:
+
+As long as the exploded super graph has been constructed, we call
+=awaitCompletionComputeValuesAndShutdown= and eventually executes
+=computeValues=:
+
+#+BEGIN_SRC java
+  private void computeValues() {
+      //Phase II(i)
+      logger.debug("Computing the final values for the edge functions");
+      //add caller seeds to initial seeds in an unbalanced problem
+      Map<N, Set<D>> allSeeds = new LinkedHashMap<N, Set<D>>(initialSeeds);
+      for(N unbalancedRetSite: unbalancedRetSites) {
+          Set<D> seeds = allSeeds.get(unbalancedRetSite);
+          if(seeds==null) {
+              seeds = new LinkedHashSet<D>();
+              allSeeds.put(unbalancedRetSite, seeds);
+          }
+          seeds.add(zeroValue);
+      }
+      //do processing
+      for(Entry<N, Set<D>> seed: allSeeds.entrySet()) {
+          N startPoint = seed.getKey();
+          for(D val: seed.getValue()) {
+              setVal(startPoint, val, valueLattice.bottomElement());
+              Pair<N, D> superGraphNode = new Pair<N,D>(startPoint, val);
+              scheduleValueProcessing(new ValuePropagationTask(superGraphNode));
+          }
+      }
+      logger.debug("Computed the final values of the edge functions");
+      //await termination of tasks
+      try {
+          executor.awaitCompletion();
+      } catch (InterruptedException e) {
+      e.printStackTrace();
+      }
+
+      //Phase II(ii)
+      //we create an array of all nodes and then dispatch fractions of this array to multiple threads
+      Set<N> allNonCallStartNodes = icfg.allNonCallStartNodes();
+      @SuppressWarnings("unchecked")
+      N[] nonCallStartNodesArray = (N[]) new Object[allNonCallStartNodes.size()];
+      int i=0;
+      for (N n : allNonCallStartNodes) {
+          nonCallStartNodesArray[i] = n;
+          i++;
+      }
+      //No need to keep track of the number of tasks scheduled here, since we call shutdown
+      for(int t=0;t<numThreads; t++) {
+          ValueComputationTask task = new ValueComputationTask(nonCallStartNodesArray, t);
+          scheduleValueComputationTask(task);
+      }
+      //await termination of tasks
+      try {
+          executor.awaitCompletion();
+      } catch (InterruptedException e) {
+          e.printStackTrace();
+      }
+  }
+
+  ...
+
+  private class ValuePropagationTask implements Runnable {
+      private final Pair<N, D> nAndD;
+
+      public ValuePropagationTask(Pair<N,D> nAndD) {
+          this.nAndD = nAndD;
+      }
+
+      public void run() {
+          N n = nAndD.getO1();
+          if(icfg.isStartPoint(n) ||
+              initialSeeds.containsKey(n) ||
+              unbalancedRetSites.contains(n)) {       //the same also for unbalanced return sites in an unbalanced problem
+              propagateValueAtStart(nAndD, n);
+          }
+          if(icfg.isCallStmt(n)) {
+              propagateValueAtCall(nAndD, n);
+          }
+      }
+  }
+#+END_SRC
+
+In the first phase, the function builds values for the initial seeds (in
+our case the first statement in main) and unbalanced RetSite. The second
+phase collect all non call nor start nodes (has been processed) and
+split them into an array of processing lists limited by =numThreads= to
+build values.
+
+The phase1 task is assigned to =ValuePropagationTask= class that further
+calls following methods. The =propagateValue= is used by the first two
+functions. It applies =meetValueAt= to get the value result and add new
+result to worklist if different. =propagateValueAtStart= enumerates all
+the call node from current procedure and calculate the result from start
+point to call node. The latter one is almost the same except it's from
+call node to callee start point:
+
+#+BEGIN_SRC java
+  private void propagateValueAtStart(Pair<N, D> nAndD, N n) {
+      D d = nAndD.getO2();
+      M p = icfg.getMethodOf(n);
+      for(N c: icfg.getCallsFromWithin(p)) {
+          Set<Entry<D, EdgeFunction<V>>> entries;
+          synchronized (jumpFn) {
+              entries = jumpFn.forwardLookup(d,c).entrySet();
+              for(Map.Entry<D,EdgeFunction<V>> dPAndFP: entries) {
+                  D dPrime = dPAndFP.getKey();
+                  EdgeFunction<V> fPrime = dPAndFP.getValue();
+                  N sP = n;
+                  propagateValue(c,dPrime,fPrime.computeTarget(val(sP,d)));
+                  flowFunctionApplicationCount++;
+              }
+          }
+      }
+  }
+
+  private void propagateValueAtCall(Pair<N, D> nAndD, N n) {
+      D d = nAndD.getO2();
+      for(M q: icfg.getCalleesOfCallAt(n)) {
+      FlowFunction<D> callFlowFunction = flowFunctions.getCallFlowFunction(n, q);
+      flowFunctionConstructionCount++;
+          for(D dPrime: callFlowFunction.computeTargets(d)) {
+              EdgeFunction<V> edgeFn = edgeFunctions.getCallEdgeFunction(n, d, q, dPrime);
+              for(N startPoint: icfg.getStartPointsOf(q)) {
+                  propagateValue(startPoint,dPrime, edgeFn.computeTarget(val(n,d)));
+                  flowFunctionApplicationCount++;
+              }
+          }
+      }
+  }
+
+  protected V meetValueAt(N unit, D fact, V curr, V newVal) {
+      return valueLattice.meet(curr, newVal);
+  }
+
+  private void propagateValue(N nHashN, D nHashD, V v) {
+      synchronized (val) {
+          V valNHash = val(nHashN, nHashD);
+          V vPrime = meetValueAt(nHashN, nHashD, valNHash,v);
+          if(!vPrime.equals(valNHash)) {
+              setVal(nHashN, nHashD, vPrime);
+              scheduleValueProcessing(new ValuePropagationTask(new Pair<N,D>(nHashN,nHashD)));
+          }
+      }
+  }
+#+END_SRC
+
+For phase2, it finds out all the corresponding target value of current
+node and use lattice to compute the result from start point to here:
+
+#+BEGIN_SRC java
+  private class ValueComputationTask implements Runnable {
+  private final N[] values;
+  final int num;
+
+      public ValueComputationTask(N[] values, int num) {
+          this.values = values;
+          this.num = num;
+      }
+
+      public void run() {
+          int sectionSize = (int) Math.floor(values.length / numThreads) + numThreads;
+          for(int i = sectionSize * num; i < Math.min(sectionSize * (num+1),values.length); i++) {
+              N n = values[i];
+              for(N sP: icfg.getStartPointsOf(icfg.getMethodOf(n))) {
+                  Set<Cell<D, D, EdgeFunction<V>>> lookupByTarget;
+                  lookupByTarget = jumpFn.lookupByTarget(n);
+                  for(Cell<D, D, EdgeFunction<V>> sourceValTargetValAndFunction : lookupByTarget) {
+                      D dPrime = sourceValTargetValAndFunction.getRowKey();
+                      D d = sourceValTargetValAndFunction.getColumnKey();
+                      EdgeFunction<V> fPrime = sourceValTargetValAndFunction.getValue();
+                      synchronized (val) {
+                          setVal(n,d,valueLattice.meet(val(n,d),fPrime.computeTarget(val(sP,dPrime))));
+                      }
+                      flowFunctionApplicationCount++;
+                  }
+              }
+          }
+      }
+  }
+#+END_SRC
+
+As long as all the computation has done, we can retrieve result from the
+protected members.
+
+* Conclusion
+  :PROPERTIES:
+  :CUSTOM_ID: conclusion
+  :END:
+
+HEROS implements an efficient parallel algorithm for IFDS/IDE problems.
+The powerful parallelism improves the scalability of PA in industry and
+worths more research. But using class to simulate closures results lots
+of redundant code...gonna to try rewrite it in another language, stay
+tuned.
