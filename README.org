@@ -2,232 +2,237 @@
 
 ** Reading Notes
 
-I have included my notes under /note/ folder. My interpretation might be wrong so isseus and PR are welcome.
+   I have included my notes under /note/ folder. My interpretation might be wrong so isseus and PR are welcome.
 
 ** Framework
 
-Here are some frameworks for program analysis. I strongly recommend you to
-implement algorithms on them.
+   Here are some frameworks for program analysis. I strongly recommend you to
+   implement algorithms on them.
 
-- =LLVM=: the =Clang Static Analyzer= is a awesome tool to analyze C/C++
-  from AST level. And =LLVM Pass= provides a more low-level IR to
-  analyze.
-- =Soot=: tools for Java program anlysis and optimization
-- =BAP=: Binary Analysis Platform. Written in OCaml. We can inspect
-  customize IR =BIL= to analyze different binary.
-- =Angr=: Binary Analysis and Symbolic Exectuion
+   - =LLVM=: the =Clang Static Analyzer= is a awesome tool to analyze C/C++
+     from AST level. And =LLVM Pass= provides a more low-level IR to
+     analyze.
+   - =Soot=: tools for Java program anlysis and optimization
+   - =BAP=: Binary Analysis Platform. Written in OCaml. We can inspect
+     customize IR =BIL= to analyze different binary.
+   - =Angr=: Binary Analysis and Symbolic Exectuion
 
 ** Project
 
-- [[https://github.com/facebook/infer][Infer]]: Source code static
-  analysis based on OCaml
+   - [[https://github.com/facebook/infer][Infer]]: Source code static
+     analysis based on OCaml
 
-- BAP based
-  - [[https://github.com/fkie-cad/cwe_checker][CWE-Checker]]: Binary
-    analysis based on BAP
-  - [[https://github.com/draperlaboratory/cbat_tools][CBAT TOOLS]]: This
-    project implements VSA and WP on BAP
-  - Several papers related to BAP implementation:
-    http://okmij.org/ftp/tagless-final/JFP.pdf
-    http://www.cs.utexas.edu/~wcook/Drafts/2012/ecoop2012.pdf
-    http://okmij.org/ftp/tagless-final/course/optimizations.html
+   - BAP based
+     - [[https://github.com/fkie-cad/cwe_checker][CWE-Checker]]: Binary
+       analysis based on BAP
+     - [[https://github.com/draperlaboratory/cbat_tools][CBAT TOOLS]]: This
+       project implements VSA and WP on BAP
+     - Several papers related to BAP implementation:
+       http://okmij.org/ftp/tagless-final/JFP.pdf
+       http://www.cs.utexas.edu/~wcook/Drafts/2012/ecoop2012.pdf
+       http://okmij.org/ftp/tagless-final/course/optimizations.html
 
-- LLVM based
-  - [[https://github.com/klee/klee][Klee]]: Symbolic Execution based on
-    LLVM
-  - [[https://github.com/SVF-tools/SVF][SVF]]: Program Analysis
-    Framework based on LLVM
+   - LLVM based
+     - [[https://github.com/klee/klee][Klee]]: Symbolic Execution based on
+       LLVM
+     - [[https://github.com/SVF-tools/SVF][SVF]]: Program Analysis
+       Framework based on LLVM
 
-- Soot based
-  - TODO
+   - Soot based
+     - TODO
 
-- [[https://github.com/facebookarchive/pfff][pfff]]: A tool set for source code analysis
-- [[https://github.com/airbus-seclab/bincat][BinCat]]
-- [[https://github.com/angr/angr][Angr]]: Binary Symbolic Executor
+   - [[https://github.com/facebookarchive/pfff][pfff]]: A tool set for source code analysis
+   - [[https://github.com/airbus-seclab/bincat][BinCat]]
+   - [[https://github.com/angr/angr][Angr]]: Binary Symbolic Executor
 
 ** Intro
 
-Normally, the basic parts include dataflow analysis frameword (reaching
-definition, interval analysis, ...), pointer analysis (andreson and
-steensgaard), and abstract interpretation (sign analysis). You are also
-encouraged to learn discrete math to understand the notations in text
-books.
+   Normally, the basic parts include dataflow analysis frameword (reaching
+   definition, interval analysis, ...), pointer analysis (andreson and
+   steensgaard), and abstract interpretation (sign analysis). You are also
+   encouraged to learn discrete math to understand the notations in text
+   books.
 
 ** Courses
 
-- Static Analysis:
+   - Static Analysis:
 
-  - [[https://courses.cs.washington.edu/courses/cse501/15sp/][UW CSE
-    501]]: Personally recommend, the contents are more compacted.
-  - [[http://www.cs.cmu.edu/~aldrich/courses/17-355-19sp/][CMU
-    CS17-355]]: Some slides are missing. And the contents focus on
-    security stuff more. Recommend to use notes here and slides from UW
-  - https://homepages.dcc.ufmg.br/~fernando/classes/dcc888/ementa/
-  - [[http://web.cs.iastate.edu/~weile/cs513x/][IOWA CS513X]]: The topic
-    is about staitc analysis but slighlty more depth.
-  - [[http://web.mit.edu/16.399/www/#schedule][MIT 16.399]]: Abstract
-    Interpretation, in a more math way.
+     - [[https://courses.cs.washington.edu/courses/cse501/15sp/][UW CSE
+       501]]: Personally recommend, the contents are more compacted.
+     - [[http://www.cs.cmu.edu/~aldrich/courses/17-355-19sp/][CMU
+       CS17-355]]: Some slides are missing. And the contents focus on
+       security stuff more. Recommend to use notes here and slides from UW
+     - https://homepages.dcc.ufmg.br/~fernando/classes/dcc888/ementa/
+     - [[http://web.cs.iastate.edu/~weile/cs513x/][IOWA CS513X]]: The topic
+       is about staitc analysis but slighlty more depth.
+     - [[http://web.mit.edu/16.399/www/#schedule][MIT 16.399]]: Abstract
+       Interpretation, in a more math way.
 
-- Program Synthesis and Model Checking
+   - Program Synthesis and Model Checking
 
-  - [[https://courses.cs.washington.edu/courses/cse599a2/15wi/][UW
-    CSE599]]: Advanced Computer-Aided Reasoning for Software
-  - [[https://www.cs.cmu.edu/~15414/schedule.html][CMU CS15-414]]: Model
-    Checking
-  - [[https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-820-fundamentals-of-program-analysis-fall-2015/][MIT 6.820]]: Focused on abstract interpreter and model checking.
+     - [[https://courses.cs.washington.edu/courses/cse599a2/15wi/][UW
+       CSE599]]: Advanced Computer-Aided Reasoning for Software
+     - [[https://www.cs.cmu.edu/~15414/schedule.html][CMU CS15-414]]: Model
+       Checking
+     - [[https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-820-fundamentals-of-program-analysis-fall-2015/][MIT 6.820]]: Focused on abstract interpreter and model checking.
 
-- SMT:
+   - SMT:
 
-  - [[https://courses.cs.washington.edu/courses/cse507/][UW CSE 507]]:
-    SMT solver and apllications
-  - [[http://www.cs.cmu.edu/~mheule/15816-f19/][CMU 15816]]: Automated
-    Reasoning and Satisfiability
+     - [[https://courses.cs.washington.edu/courses/cse507/][UW CSE 507]]:
+       SMT solver and apllications
+     - [[http://www.cs.cmu.edu/~mheule/15816-f19/][CMU 15816]]: Automated
+       Reasoning and Satisfiability
 
-- Books:
+   - Books:
 
-  - [[https://cs.au.dk/~amoeller/spa/spa.pdf][SPA Book]]: Personally
-    recommend. This book is static analysis oriented. It also provied a
-    toy language analyszer. The psedu-code and syntax are better the
-    PPA.
-  - Principle of Program Analysis: Old school book. The syntax is
-    abstract. Might be too hard to understand.
+     - [[https://cs.au.dk/~amoeller/spa/spa.pdf][SPA Book]]: Personally
+       recommend. This book is static analysis oriented. It also provied a
+       toy language analyszer. The psedu-code and syntax are better the
+       PPA.
+     - Principle of Program Analysis: Old school book. The syntax is
+       abstract. Might be too hard to understand.
 
 ** Abstract Interpretation
 
-- [[https://www.di.ens.fr/~cousot/publications.www/CousotCousot-CSL-LICS-2014.pdf][Abstract Interpretation: Past, Present and Future]]
-- Abstract Interpretation Course:
-  [[http://web.mit.edu/16.399/www/][16.399 by MIT]]
-- [[https://courses.cs.washington.edu/courses/cse501/15sp/papers/cousot.pdf][ABSTRACT
-  INTERPRETATION : ‘A UNIFIED LATTICE MODEL FOR STATIC ANALYSIS OF
-  PROGRAMS BY CONSTRUCTION OR APPROXIMATION OF FIXPOINTS]]: The original
-  paper
-- [[https://www.di.ens.fr/~cousot/AI/][A thoughtful wiki about AI]]
-- [[https://dl.acm.org/doi/pdf/10.1145/3290355][Meta Abstract Interpretation]]: Use abstract interpretation to analyze static analyzer (I guess somehow simillar to AAM)
+   - [[https://www.di.ens.fr/~cousot/publications.www/CousotCousot-CSL-LICS-2014.pdf][Abstract Interpretation: Past, Present and Future]]
+   - Abstract Interpretation Course:
+     [[http://web.mit.edu/16.399/www/][16.399 by MIT]]
+   - [[https://courses.cs.washington.edu/courses/cse501/15sp/papers/cousot.pdf][ABSTRACT
+     INTERPRETATION : ‘A UNIFIED LATTICE MODEL FOR STATIC ANALYSIS OF
+     PROGRAMS BY CONSTRUCTION OR APPROXIMATION OF FIXPOINTS]]: The original
+     paper
+   - [[https://www.di.ens.fr/~cousot/AI/][A thoughtful wiki about AI]]
+   - [[https://dl.acm.org/doi/pdf/10.1145/3290355][Meta Abstract Interpretation]]: Use abstract interpretation to analyze static analyzer (I guess somehow simillar to AAM)
 
-** Dataflow Analysis
+*** Dataflow Analysis
 
-- [[https://dl.acm.org/doi/pdf/10.1145/3290361?download=true][Context-,
-  Flow-, and Field-Sensitive Data-Flow Analysis using Synchronized
-  Pushdown Systems]]: Best paper!
-- [[https://research.cs.wisc.edu/wpis/papers/popl95.pdf][Precise
-  Interprocedural Dataflow Analysis via Graph Reachability]]: The IFDS
-  framework
-- [[https://research.cs.wisc.edu/wpis/papers/sas03.pdf][Weighted Pushdown Systems and their Application to Interprocedural Dataflow Analysis]]: An enhanced version of IFDS
-- [[https://research.cs.wisc.edu/wpis/papers/tapsoft95.pdf][Precise interprocedural dataflow analysis with applications to constant propagation]]: IDE framework, IDFS's cute cousin with more all-purpose but more complexity as well.
-- [[https://link.springer.com/content/pdf/10.1007/3-540-52592-0_76.pdf][The Value Flow Graph: A Program Representation for Optimal Program Transformations]: Value Flow Graphs represent semantic equivalence of terms syntactically. This allows us to feed the knowledge of semantic equivalence into syntactic algorithms. 
+    - [[https://dl.acm.org/doi/pdf/10.1145/3290361?download=true][Context-,
+      Flow-, and Field-Sensitive Data-Flow Analysis using Synchronized
+      Pushdown Systems]]: Best paper!
+    - [[https://research.cs.wisc.edu/wpis/papers/popl95.pdf][Precise
+      Interprocedural Dataflow Analysis via Graph Reachability]]: The IFDS
+      framework
+    - [[https://research.cs.wisc.edu/wpis/papers/sas03.pdf][Weighted Pushdown Systems and their Application to Interprocedural Dataflow Analysis]]: An enhanced version of IFDS
+    - [[https://research.cs.wisc.edu/wpis/papers/tapsoft95.pdf][Precise interprocedural dataflow analysis with applications to constant propagation]]: IDE framework, IDFS's cute cousin with more all-purpose but more complexity as well.
+    - [[https://link.springer.com/content/pdf/10.1007/3-540-52592-0_76.pdf][The Value Flow Graph: A Program Representation for Optimal Program Transformations]: Value Flow Graphs represent semantic equivalence of terms syntactically. This allows us to feed the knowledge of semantic equivalence into syntactic algorithms.
+    - [[https://arxiv.org/pdf/1909.05951.pdf][Deterministic Parallel Fixpoint Computation]]
 
-** Pointer Analysis:
-- Inclusion Based:
-  - Steengard & Andreson: Learn than from intro courses
-  - [[https://www.cs.utexas.edu/~lin/papers/pldi07.pdf][The Ant and the Grasshopper: Fast and Accurate Pointer Analysis for Millions of Lines of Code]]
-- Binary Decision Tree Based:
-  - [[https://dl.acm.org/doi/10.1145/996841.996859][Cloning-based context-sensitive pointer alias analysis using binary decision diagrams]]
-- Probability Based:
-  - [[http://www.eecg.toronto.edu/~steffan/papers/asplos06.pdf][A Probabilistic Pointer Analysis for Speculative Optimizations]]
-- [[https://llvm.org/pubs/2007-06-10-PLDI-DSA.pdf][Making Context-sensitive Points-to Analysis with Heap Cloning Practical For The Real World]]
+*** Pointer Analysis:
+    - Inclusion Based:
+      - Steengard & Andreson: Learn than from intro courses
+      - [[https://www.cs.utexas.edu/~lin/papers/pldi07.pdf][The Ant and the Grasshopper: Fast and Accurate Pointer Analysis for Millions of Lines of Code]]
+    - Binary Decision Tree Based:
+      - [[https://dl.acm.org/doi/10.1145/996841.996859][Cloning-based context-sensitive pointer alias analysis using binary decision diagrams]]
+    - Probability Based:
+      - [[http://www.eecg.toronto.edu/~steffan/papers/asplos06.pdf][A Probabilistic Pointer Analysis for Speculative Optimizations]]
+    - [[https://llvm.org/pubs/2007-06-10-PLDI-DSA.pdf][Making Context-sensitive Points-to Analysis with Heap Cloning Practical For The Real World]]
 
-** Heap
+*** Heap
 
-- [[https://arxiv.org/abs/1403.4910][Heap Abstractions for Static Analysis]]
+    - [[https://arxiv.org/abs/1403.4910][Heap Abstractions for Static Analysis]]
 
-** Shape Analysis;
+*** Shape Analysis;
 
-- [[https://research.cs.wisc.edu/wpis/papers/cc2000.pdf][Shape Analysis
-  by WISC]]: Introduce shape analysis for heap
-- [[https://personal.utdallas.edu/~zhiqiang.lin/file/f15/shape-analysis-ch12.pdf][Shape
-  Analysis and Applications by UT]]
+    - [[https://research.cs.wisc.edu/wpis/papers/cc2000.pdf][Shape Analysis
+      by WISC]]: Introduce shape analysis for heap
+    - [[https://personal.utdallas.edu/~zhiqiang.lin/file/f15/shape-analysis-ch12.pdf][Shape
+      Analysis and Applications by UT]]
 
-** Porgram Slicing:
+*** Porgram Slicing:
 
-- [[http://www.cs.toronto.edu/~chechik/courses06/csc2125/tip95survey.pdf][Program
-  Slicing Handbook]]: For some values your analyzer intereted, we can
-  slice the program to find related part of the program which impacts
-  thos values.
-- [[https://silverbullettt.bitbucket.io/papers/ecoop2016.pdf][Program Tailoring: Slicing by Sequential Criteria]]
+    - [[http://www.cs.toronto.edu/~chechik/courses06/csc2125/tip95survey.pdf][Program
+      Slicing Handbook]]: For some values your analyzer intereted, we can
+      slice the program to find related part of the program which impacts
+      thos values.
+    - [[https://silverbullettt.bitbucket.io/papers/ecoop2016.pdf][Program Tailoring: Slicing by Sequential Criteria]]
 
-** Binary Analysis
+*** Binary Analysis
    :PROPERTIES:
    :CUSTOM_ID: binary-analysis
    :END:
 
-- Value Set Analysis:
+   - Value Set Analysis:
 
-  1. [[https://research.cs.wisc.edu/wpis/papers/cc04.pdf][Analyzing Memory Accesses in x86 Executables]]: Introduce *value-set analysis*. This analysis uses an abstract domain for representing an over-approximation of the set of values that each data object can hold at each program point.
+     1. [[https://research.cs.wisc.edu/wpis/papers/cc04.pdf][Analyzing Memory Accesses in x86 Executables]]: Introduce *value-set analysis*. This analysis uses an abstract domain for representing an over-approximation of the set of values that each data object can hold at each program point.
 
-  2. [[https://research.cs.wisc.edu/wpis/papers/etaps08.invited.pdf][Improved Memory-Access Analysis for x86 Executables]]: An improved version of VSA.
+     2. [[https://research.cs.wisc.edu/wpis/papers/etaps08.invited.pdf][Improved Memory-Access Analysis for x86 Executables]]: An improved version of VSA.
 
-  3. [[https://www.usenix.org/conference/usenixsecurity19/presentation/guo][DEEPVSA: Facilitating Value-set Analysis with Deep Learning for Postmortem Program Analysis]]: VSA + ML
+     3. [[https://www.usenix.org/conference/usenixsecurity19/presentation/guo][DEEPVSA: Facilitating Value-set Analysis with Deep Learning for Postmortem Program Analysis]]: VSA + ML
 
-- [[https://patricegodefroid.github.io/public_psfiles/icse2014.pdf][MicroX:
-  Emulator for testing without input]]: A novel framework to emulate
-  program without input for bug finding.
+   - [[https://patricegodefroid.github.io/public_psfiles/icse2014.pdf][MicroX:
+     Emulator for testing without input]]: A novel framework to emulate
+     program without input for bug finding.
 
-- Decompile (or Binary Translation):
+   - Decompile (or Binary Translation):
 
-  - [[http://www.phatcode.net/res/228/files/decompilation_thesis.pdf][Reverse
-    Compilation Techniques]]: This book is awesome, all about
-    decompiling from frontend to backend!!!
-  - [[https://users.ece.cmu.edu/~aavgerin/papers/tie-ndss-2011.pdf][TIE:
-    Principled Reverse Engineering of Types in Binary Programs]]:
-    Recover types from a program based on type lattice induction.
-  - [[https://arxiv.org/pdf/1603.05495.pdf][Polymorphic Type Inference
-    for Machine Code]]: Another thesis for type infer in binary code.
-  - [[https://github.com/lifting-bits/mcsema/][mcsema]]: Translate
-    binary to LLVM bytecode.
+     - [[http://www.phatcode.net/res/228/files/decompilation_thesis.pdf][Reverse
+       Compilation Techniques]]: This book is awesome, all about
+       decompiling from frontend to backend!!!
+     - [[https://users.ece.cmu.edu/~aavgerin/papers/tie-ndss-2011.pdf][TIE:
+       Principled Reverse Engineering of Types in Binary Programs]]:
+       Recover types from a program based on type lattice induction.
+     - [[https://arxiv.org/pdf/1603.05495.pdf][Polymorphic Type Inference
+       for Machine Code]]: Another thesis for type infer in binary code.
+     - [[https://github.com/lifting-bits/mcsema/][mcsema]]: Translate
+       binary to LLVM bytecode.
 
-- Exploitation:
- - [[https://arxiv.org/pdf/1903.00503.pdf][Automatic Techniques to Systematically Discover New Heap Exploitation Primitives]]
+   - Exploitation:
+     - [[https://arxiv.org/pdf/1903.00503.pdf][Automatic Techniques to Systematically Discover New Heap Exploitation Primitives]]
 
 ** Formal Verification
 
-- [[https://softwarefoundations.cis.upenn.edu/current/index.html][Software
-  Foundation]]: Proof Assitance all in one
+   - [[https://softwarefoundations.cis.upenn.edu/current/index.html][Software
+     Foundation]]: Proof Assitance all in one
+
+** Model Checking
+
+   TODO...
 
 ** PA + Security
    :PROPERTIES:
    :CUSTOM_ID: pa-security
    :END:
 
-- Safety
+   - Safety
 
-  - [[https://www.microsoft.com/en-us/research/wp-content/uploads/2005/11/ccs05.pdf][Control
-    Flow Intergrity]]
+     - [[https://www.microsoft.com/en-us/research/wp-content/uploads/2005/11/ccs05.pdf][Control
+       Flow Intergrity]]
 
-- Taint Analysis:
+   - Taint Analysis:
 
-  - [[https://www.cs.cmu.edu/~rvantond/pdfs/saluki-bar-2018.pdf][Saluki
-    Taint Analysis]]
+     - [[https://www.cs.cmu.edu/~rvantond/pdfs/saluki-bar-2018.pdf][Saluki
+       Taint Analysis]]
 
 ** Fuzz
-  - [[https://dl.acm.org/doi/pdf/10.1145/2976749.2978428][Coverage-based Greybox Fuzzing as Markov Chain]]
+   - [[https://dl.acm.org/doi/pdf/10.1145/2976749.2978428][Coverage-based Greybox Fuzzing as Markov Chain]]
 
 ** Related Stuff
 
 *** SMT Solver
 
-- [[https://theory.stanford.edu/~nikolaj/programmingz3.html][Programming
-  Z3]]
-- [[https://www.ics.uci.edu/%7Edechter/courses/ics-275a/winter-2016/readings/SATHandbook-CDCL.pdf][SAT
-  Handbook]]
-- *The Calculus of Computation*: All about SMT foundamental.
+    - [[https://theory.stanford.edu/~nikolaj/programmingz3.html][Programming
+      Z3]]
+    - [[https://www.ics.uci.edu/%7Edechter/courses/ics-275a/winter-2016/readings/SATHandbook-CDCL.pdf][SAT
+      Handbook]]
+    - *The Calculus of Computation*: All about SMT foundamental.
 
 *** Abstract Machine
     :PROPERTIES:
     :CUSTOM_ID: abstract-machine
     :END:
 
-Abstract Machine primarirly discuss about the exact execution of a
-program.
+    Abstract Machine primarirly discuss about the exact execution of a
+    program.
 
-- [[http://www.inf.ed.ac.uk/teaching/courses/lsi/diehl_abstract_machines.pdf][Abstract machines for programming language implementation]]
+    - [[http://www.inf.ed.ac.uk/teaching/courses/lsi/diehl_abstract_machines.pdf][Abstract machines for programming language implementation]]
 
-- [[http://matt.might.net/papers/vanhorn2010abstract.pdf][Abstracting Abstract Machines]]: The name is so abstract
+    - [[http://matt.might.net/papers/vanhorn2010abstract.pdf][Abstracting Abstract Machines]]: The name is so abstract
 
-- [[https://plum-umd.github.io/abstracting-definitional-interpreters/][Abstracting Definitional Interpreters]]: Solid foundation of semmantics
+    - [[https://plum-umd.github.io/abstracting-definitional-interpreters/][Abstracting Definitional Interpreters]]: Solid foundation of semmantics
 
 ** Others
 
-- [[https://users.ece.cmu.edu/~dbrumley/pdf/Cha%20et%20al._2012_Unleashing%20Mayhem%20on%20Binary%20Code.pdf][Unleashing MAYHEM on Binary Code]]: How to structure a CRS, and new methods on
-  symbolic execution
+   - [[https://users.ece.cmu.edu/~dbrumley/pdf/Cha%20et%20al._2012_Unleashing%20Mayhem%20on%20Binary%20Code.pdf][Unleashing MAYHEM on Binary Code]]: How to structure a CRS, and new methods on
+     symbolic execution
 
-- [[https://www.itu.dk/people/sestoft/pebook/jonesgomardsestoft-a4.pdf][Partial Evaluation]]
+   - [[https://www.itu.dk/people/sestoft/pebook/jonesgomardsestoft-a4.pdf][Partial Evaluation]]
