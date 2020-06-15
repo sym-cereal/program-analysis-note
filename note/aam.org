@@ -1,0 +1,5 @@
+* Abstracting Abstract Machine
+
+  This paper provides a novel insight on how to modelling and approximating
+  abstract machine. And thus we can derive abstract interpreter based on the
+  abstraction.
