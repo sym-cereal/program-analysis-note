@@ -54,7 +54,7 @@
 
 ** Courses
 
-   - Static Analysis:
+   - Static Analysis(Abstract Interpretation Based):
 
      - [[https://courses.cs.washington.edu/courses/cse501/15sp/][UW CSE501]] Personally recommend, the contents are more compacted.
      - [[http://www.cs.cmu.edu/~aldrich/courses/17-355-19sp/][CMU CS17-355]]: Some slides are missing. And the contents focus on
@@ -89,13 +89,13 @@
 
 ** Abstract Interpretation
 
-   - [[https://www.di.ens.fr/~cousot/publications.www/CousotCousot-CSL-LICS-2014.pdf][Abstract Interpretation: Past, Present and Future]]
+   - [[https://www.di.ens.fr/~cousot/publications.www/CousotCousot-CSL-LICS-2014.pdf][Abstract Interpretation: Past, Present and Future]]: Check out the references, surprise!
    - Abstract Interpretation Course:
      [[http://web.mit.edu/16.399/www/][16.399 by MIT]]
    - [[https://courses.cs.washington.edu/courses/cse501/15sp/papers/cousot.pdf][ABSTRACT
      INTERPRETATION : ‘A UNIFIED LATTICE MODEL FOR STATIC ANALYSIS OF
      PROGRAMS BY CONSTRUCTION OR APPROXIMATION OF FIXPOINTS]]: The original
-     paper
+     paper.
    - [[https://www.di.ens.fr/~cousot/AI/][A thoughtful wiki about AI]]
    - [[https://dl.acm.org/doi/pdf/10.1145/3290355][Meta Abstract Interpretation]]: Use abstract interpretation to analyze static
      analyzer (I guess somehow simillar to AAM)
@@ -149,8 +149,7 @@
 
       3. [[https://www.usenix.org/conference/usenixsecurity19/presentation/guo][DEEPVSA: Facilitating Value-set Analysis with Deep Learning for Postmortem Program Analysis]]: VSA + ML
 
-    - [[https://patricegodefroid.github.io/public_psfiles/icse2014.pdf][MicroX:
-      Emulator for testing without input]]: A novel framework to emulate
+    - [[https://patricegodefroid.github.io/public_psfiles/icse2014.pdf][MicroX:Emulator for testing without input]]: A novel framework to emulate
       program without input for bug finding.
 
     - Decompile (or Binary Translation):
@@ -161,7 +160,7 @@
       - [[https://github.com/lifting-bits/mcsema/][mcsema]]: Translate binary to LLVM bytecode.
 
 
-** Formal Verification
+** Theorem Proving
 
    - [[https://softwarefoundations.cis.upenn.edu/current/index.html][Software Foundation]]: Proof Assitance all in one
 
