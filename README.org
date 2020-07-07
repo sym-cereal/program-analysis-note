@@ -96,7 +96,8 @@
      INTERPRETATION : ‘A UNIFIED LATTICE MODEL FOR STATIC ANALYSIS OF
      PROGRAMS BY CONSTRUCTION OR APPROXIMATION OF FIXPOINTS]]: The original
      paper.
-   - [[https://www.di.ens.fr/~cousot/AI/][A thoughtful wiki about AI]]
+   - [[https://www.di.ens.fr/~cousot/AI/][Wiki about AI]]
+   - [[https://www.di.ens.fr/~cousot/COUSOTpapers/POPL79.shtml][Systematic Design of Program Analysis Frameworks]]
    - [[https://dl.acm.org/doi/pdf/10.1145/3290355][Meta Abstract Interpretation]]: Use abstract interpretation to analyze static
      analyzer (I guess somehow simillar to AAM)
 
@@ -120,7 +121,7 @@
       - [[http://www.eecg.toronto.edu/~steffan/papers/asplos06.pdf][A Probabilistic Pointer Analysis for Speculative Optimizations]]
     - [[https://llvm.org/pubs/2007-06-10-PLDI-DSA.pdf][Making Context-sensitive Points-to Analysis with Heap Cloning Practical For The Real World]]
 
-*** Heap
+*** Heap:
 
     - [[https://arxiv.org/abs/1403.4910][Heap Abstractions for Static Analysis]]
 
@@ -136,10 +137,11 @@
       thos values.
     - [[https://silverbullettt.bitbucket.io/papers/ecoop2016.pdf][Program Tailoring: Slicing by Sequential Criteria]]
 
+*** SSA:
+
+    - [[https://dl.acm.org/doi/10.1145/115372.115320][Efficiently computing static single assignment form and the control dependence graph]]
+
 *** Binary Analysis
-    :PROPERTIES:
-    :CUSTOM_ID: binary-analysis
-    :END:
 
     - Value Set Analysis:
 
