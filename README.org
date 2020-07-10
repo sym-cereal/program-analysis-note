@@ -112,6 +112,10 @@
     - [[https://link.springer.com/content/pdf/10.1007/3-540-52592-0_76.pdf][The Value Flow Graph]]: A Program Representation for Optimal Program Transformations]: Value Flow Graphs represent semantic equivalence of terms syntactically. This allows us to feed the knowledge of semantic equivalence into syntactic algorithms.
     - [[https://arxiv.org/pdf/1909.05951.pdf][Deterministic Parallel Fixpoint Computation]]
 
+*** Control Flow Analysis:
+
+    - [[https://arxiv.org/pdf/1007.4268.pdf][Pushdown Control-Flow Analysis of Higher-Order Programs]]
+
 *** Pointer Analysis:
     - Inclusion Based:
       - Steengard & Andreson: Learn than from intro courses
