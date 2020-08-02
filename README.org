@@ -100,7 +100,8 @@
    - [[https://www.di.ens.fr/~cousot/COUSOTpapers/POPL79.shtml][Systematic Design of Program Analysis Frameworks]]
    - [[https://dl.acm.org/doi/pdf/10.1145/3290355][Meta Abstract Interpretation]]: Use abstract interpretation to analyze static
      analyzer (I guess somehow simillar to AAM)
-
+   - [[https://arxiv.org/pdf/1511.06965.pdf][Constructive Galois Connections]]
+    
 *** Dataflow Analysis
 
     - [[https://dl.acm.org/doi/pdf/10.1145/3290361?download=true][Context-, Flow-, and Field-Sensitive Data-Flow Analysis using Synchronized
@@ -133,13 +134,14 @@
 
     - [[https://research.cs.wisc.edu/wpis/papers/cc2000.pdf][Shape Analysis by WISC]]: Introduce shape analysis for heap
     - [[https://personal.utdallas.edu/~zhiqiang.lin/file/f15/shape-analysis-ch12.pdf][Shape Analysis and Applications by UT]]
+    - [[https://research.cs.wisc.edu/wpis/papers/sas06-dsw.pdf][Automated Verification of the Deutsch-Schorr-Waite Tree-Traversal Algorithm]]
 
 *** Porgram Slicing:
 
     - [[http://www.cs.toronto.edu/~chechik/courses06/csc2125/tip95survey.pdf][Program Slicing Handbook]]: For some values your analyzer intereted, we can
       slice the program to find related part of the program which impacts
       thos values.
-    - [[https://silverbullettt.bitbucket.io/papers/ecoop2016.pdf][Program Tailoring: Slicing by Sequential Criteria]]
+    - [[https://silverbullett.bitbucket.io/papers/ecoop2016.pdf][Program Tailoring: Slicing by Sequential Criteria]]
 
 *** SSA:
 
