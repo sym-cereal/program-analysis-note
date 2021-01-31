@@ -101,6 +101,7 @@
    - [[https://dl.acm.org/doi/pdf/10.1145/3290355][Meta Abstract Interpretation]]: Use abstract interpretation to analyze static
      analyzer (I guess somehow simillar to AAM)
    - [[https://arxiv.org/pdf/1511.06965.pdf][Constructive Galois Connections]]
+   - [[https://cs.nyu.edu/~pcousot/publications.www/CousotGiacobazziRanzato-POPL2019.pdf][A2I]]: An generic approach for abstract interpreting abstract interpretation. 
    - Abstracting Abstract Machine Series:
      - [[https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.481.8690&rep=rep1&type=pdf][Systematic abstraction of abstract machines]]: How to write an AAM in Haskell.
      - [[http://matt.might.net/papers/vanhorn2010abstract.pdf][Abstracting Abstract Machines]]: Using CFA to abstract the behavior of an
